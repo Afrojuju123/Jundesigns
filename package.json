@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "type-check": "tsc --noEmit",
     "test:header": "playwright test tests/universal-header.spec.ts",
     "secretlint": "secretlint \"**/*\"",
     "prepare": "husky"
