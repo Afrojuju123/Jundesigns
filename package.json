@@ -5,10 +5,19 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:worker": "opennextjs-cloudflare build",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "start": "next start",
     "lint": "next lint",
+    "test:header": "playwright test tests/universal-header.spec.ts",
+    "type-check": "tsc --noEmit",
     "secretlint": "secretlint \"**/*\"",
     "prepare": "husky"
+  },
+  "engines": {
+    "node": ">=20.9.0"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -19,6 +28,8 @@
     "tailwind-merge": "^3.0.2"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "^1.20.16",
+    "@playwright/test": "^1.64.1",
     "@secretlint/secretlint-rule-preset-recommend": "^13.1.0",
     "@types/node": "^22.13.5",
     "@types/react": "^19.0.10",
@@ -29,6 +40,7 @@
     "puppeteer-core": "^25.16.0",
     "secretlint": "^13.1.0",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "wrangler": "^4.158.0"
   }
 }

@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { paymentProvider } from "@/lib/booking/payment";
 import { confirmBookingPayment } from "@/lib/booking/store";
+import { isBookingsEnabled, disabledBookingResponse } from "@/lib/flags";
 
 export async function POST(request: NextRequest) {
+  if (!isBookingsEnabled()) {
+    return disabledBookingResponse();
+  }
+
   try {
     const signature = request.headers.get("x-signature") || "";
     const payload = await request.json();

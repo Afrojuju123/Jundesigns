@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { X, ZoomIn } from "lucide-react";
-import { ImageSlot } from "@/components/atoms/ImageSlot";
 import { cn } from "@/lib/utils";
 
 export interface GalleryItem {
@@ -43,105 +43,110 @@ export const GalleryGrid: React.FC<GalleryGridProps> = ({
 
   return (
     <>
+      {/* Equal 3-column / 2-column / 1-column grid with items-stretch */}
       <div
         className={cn(
-          "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch",
+          "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch w-full",
           className
         )}
       >
         {items.map((item, idx) => (
-          <div
+          <article
             key={item.id}
-            onClick={() => setActiveItem(item)}
-            className={cn(
-              "group relative cursor-pointer overflow-hidden rounded-card border border-amber-400/20 bg-brown-850 flex flex-col justify-between transition-all duration-quick hover:border-amber-400/50 hover:shadow-warm-low",
-              idx === 0 ? "sm:col-span-2 lg:col-span-2" : ""
-            )}
+            onClick={() => item.src && setActiveItem(item)}
+            className="group relative cursor-pointer overflow-hidden rounded-card border border-amber-400/20 bg-brown-850 p-5 sm:p-6 flex flex-col h-full transition-all duration-quick hover:border-amber-400/50 hover:shadow-warm-low select-none"
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
-                setActiveItem(item);
+                if (item.src) setActiveItem(item);
               }
             }}
             aria-label={`View photo: ${item.title}`}
           >
-            <div className="relative w-full flex-1 min-h-[220px]">
-              <ImageSlot
-                src={item.src}
-                alt={item.title}
-                label={item.title}
-                aspectRatio={item.aspectRatio || (idx === 0 ? "16/9" : "4/3")}
-                radius="none"
-                className="h-full border-none"
-              />
+            {/* Fixed 4:3 Aspect Ratio Image */}
+            <div className="relative aspect-[4/3] w-full rounded-card overflow-hidden border border-amber-400/20 bg-brown-900 mb-4 shrink-0">
+              {item.src ? (
+                <Image
+                  src={item.src}
+                  alt={item.title}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  loading={idx < 3 ? "eager" : "lazy"}
+                  className="object-cover transition-transform duration-smooth group-hover:scale-105"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-brown-900 text-sand-muted text-xs">
+                  {process.env.NODE_ENV === "development" ? "PHOTO SLOT" : ""}
+                </div>
+              )}
             </div>
 
-            <div className="p-4 text-left border-t border-amber-400/15 flex items-center justify-between bg-brown-850">
-              <div>
-                <h4 className="font-display font-bold text-sm tracking-wide text-sand-bright group-hover:text-amber transition-colors">
-                  {item.title}
-                </h4>
-                <p className="font-sans text-xs text-sand-muted line-clamp-1 mt-0.5">
-                  {item.description}
-                </p>
+            {/* Content Column */}
+            <div className="flex flex-col flex-1">
+              <h4 className="font-serif text-lg sm:text-xl font-bold text-sand-bright line-clamp-2 min-h-[3rem] flex items-center group-hover:text-amber transition-colors">
+                {item.title}
+              </h4>
+              <p className="font-sans text-xs sm:text-sm text-sand-primary line-clamp-2 min-h-[2.5rem] mt-1.5 leading-relaxed">
+                {item.description}
+              </p>
+
+              {/* Action row pinned to bottom with mt-auto */}
+              <div className="mt-auto pt-3 border-t border-amber-400/15 flex items-center justify-between text-xs text-amber font-display uppercase tracking-button">
+                <span>View detail</span>
+                <span className="p-1.5 rounded-full bg-brown-900 border border-amber-400/20 text-amber group-hover:bg-amber group-hover:text-brown-950 transition-colors">
+                  <ZoomIn className="w-3.5 h-3.5 stroke-[2]" />
+                </span>
               </div>
-              <span className="p-1.5 rounded-full bg-brown-900 border border-amber-400/20 text-amber group-hover:bg-amber group-hover:text-brown-900 transition-colors shrink-0 ml-2">
-                <ZoomIn className="w-3.5 h-3.5 stroke-[2]" />
-              </span>
             </div>
-          </div>
+          </article>
         ))}
       </div>
 
       {/* Accessible Modal Lightbox */}
-      {activeItem && (
+      {activeItem && activeItem.src && (
         <div
+          className="fixed inset-0 z-50 bg-brown-950/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-reveal"
           role="dialog"
           aria-modal="true"
-          aria-labelledby="lightbox-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-brown-950/90 backdrop-blur-md animate-reveal"
+          aria-label={`Expanded view: ${activeItem.title}`}
           onClick={() => setActiveItem(null)}
         >
           <div
-            className="relative w-full max-w-3xl rounded-card bg-brown-900 border border-amber-400/40 p-6 md:p-8 shadow-drawer space-y-4"
+            className="relative max-w-4xl w-full bg-brown-900 border border-amber-400/30 rounded-hero overflow-hidden shadow-drawer text-left"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between border-b border-amber-400/15 pb-4">
-              <div>
-                <span className="font-display text-xs font-bold uppercase tracking-eyebrow text-amber">
-                  — WORKSHOP ARCHIVE
-                </span>
-                <h3
-                  id="lightbox-title"
-                  className="font-serif text-2xl md:text-3xl font-bold text-sand-bright mt-1"
-                >
-                  {activeItem.title}
-                </h3>
-              </div>
-              <button
-                onClick={() => setActiveItem(null)}
-                aria-label="Close modal"
-                className="w-10 h-10 rounded-full bg-brown-800 border border-amber-400/30 flex items-center justify-center text-sand-bright hover:text-amber hover:border-amber transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5 stroke-[1.5]" />
-              </button>
-            </div>
+            <button
+              onClick={() => setActiveItem(null)}
+              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-brown-950/80 text-sand-primary hover:text-amber border border-amber-400/30 transition-colors cursor-pointer"
+              aria-label="Close dialog"
+            >
+              <X className="w-5 h-5" />
+            </button>
 
-            <div className="w-full">
-              <ImageSlot
+            <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full bg-brown-950">
+              <Image
                 src={activeItem.src}
                 alt={activeItem.title}
-                label={activeItem.title}
-                aspectRatio="16/9"
-                radius="card"
+                fill
+                priority
+                sizes="(max-width: 1200px) 100vw, 1200px"
+                className="object-contain"
               />
             </div>
 
-            <p className="font-sans text-sm md:text-base text-sand-primary leading-relaxed text-left">
-              {activeItem.description}
-            </p>
+            <div className="p-6 sm:p-8 space-y-2 bg-brown-900 border-t border-amber-400/20">
+              <span className="font-display text-xs font-bold uppercase tracking-eyebrow text-amber block">
+                Jun Designs Artisan Documentary
+              </span>
+              <h3 className="font-serif text-2xl font-bold text-sand-bright">
+                {activeItem.title}
+              </h3>
+              <p className="font-sans text-sm sm:text-base text-sand-primary leading-relaxed max-w-2xl">
+                {activeItem.description}
+              </p>
+            </div>
           </div>
         </div>
       )}

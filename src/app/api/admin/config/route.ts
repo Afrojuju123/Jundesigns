@@ -6,8 +6,13 @@ import {
   toggleBlockedDate,
   updateCancellationPolicyText,
 } from "@/lib/booking/store";
+import { isBookingsEnabled, disabledAdminResponse } from "@/lib/flags";
 
 export async function GET() {
+  if (!isBookingsEnabled()) {
+    return disabledAdminResponse();
+  }
+
   const authed = await isAuthenticated();
   if (!authed) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -21,6 +26,10 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  if (!isBookingsEnabled()) {
+    return disabledAdminResponse();
+  }
+
   const authed = await isAuthenticated();
   if (!authed) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -53,6 +62,9 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (err: any) {
-    return NextResponse.json({ error: err?.message || "Config update failed." }, { status: 500 });
+    return NextResponse.json(
+      { error: err?.message || "Failed to update configuration." },
+      { status: 500 }
+    );
   }
 }

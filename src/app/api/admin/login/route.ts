@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyPassword, getAdminCookieHeader } from "@/lib/booking/admin-auth";
+import { isBookingsEnabled, disabledAdminResponse } from "@/lib/flags";
 
 export async function POST(request: NextRequest) {
+  if (!isBookingsEnabled()) {
+    return disabledAdminResponse();
+  }
+
   try {
     const { password } = await request.json();
 

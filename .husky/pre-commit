@@ -1,2 +1,3 @@
 #!/bin/sh
+npx tsc --noEmit
 node node_modules/secretlint/bin/secretlint.js "**/*"

@@ -5,13 +5,28 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --header-height: 80px;
+  }
+  @media (min-width: 768px) {
+    :root {
+      --header-height: 96px;
+    }
+  }
+
   * {
     box-sizing: border-box;
   }
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: var(--header-height);
+    scrollbar-gutter: stable;
     -webkit-text-size-adjust: 100%;
+  }
+
+  [id] {
+    scroll-margin-top: var(--header-height);
   }
 
   body {
