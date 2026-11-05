@@ -556,7 +556,8 @@ async function dispatchWithRetry(
   recipient: string,
   subject: string,
   type: "guest_confirmation" | "studio_alert" | "session_reminder",
-  forceFailUntilAttempt: number = 0
+  forceFailUntilAttempt: number = 0,
+  content?: { html?: string; text?: string }
 ): Promise<{ success: boolean; attempts: number; error?: string }> {
   const maxAttempts = 3;
   let attempts = 0;
@@ -583,7 +584,31 @@ async function dispatchWithRetry(
         throw new Error(`SMTP Connection Timeout (Simulated network drop on attempt ${attempts})`);
       }
 
-      // Successful simulated dispatch
+      // If Resend API key is configured in production, send live email
+      if (process.env.RESEND_API_KEY && content) {
+        const fromEmail = process.env.EMAIL_FROM || "Jun Designs <workshops@jundesigns.rw>";
+        const res = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: fromEmail,
+            to: [recipient],
+            subject,
+            html: content.html,
+            text: content.text,
+          }),
+        });
+
+        if (!res.ok) {
+          const errBody = await res.text();
+          throw new Error(`Resend API error (${res.status}): ${errBody}`);
+        }
+      }
+
+      // Successful dispatch
       dispatchRecord.status = attempts > 1 ? "retried" : "sent";
       delete dispatchRecord.error;
       emailAuditLog.push(dispatchRecord);
@@ -610,13 +635,14 @@ export async function sendBookingConfirmationEmail(
   booking: Booking,
   forceFailUntilAttempt: number = 0
 ): Promise<{ success: boolean; attempts: number; error?: string }> {
-  const { subject } = renderGuestConfirmationEmail(booking);
+  const { subject, html, text } = renderGuestConfirmationEmail(booking);
   const result = await dispatchWithRetry(
     booking.reference,
     booking.customerEmail,
     subject,
     "guest_confirmation",
-    forceFailUntilAttempt
+    forceFailUntilAttempt,
+    { html, text }
   );
 
   if (result.success) {
@@ -633,12 +659,14 @@ export async function sendStudioAlertEmail(
   booking: Booking,
   studioEmail: string = "workshops@jundesigns.rw"
 ): Promise<{ success: boolean; attempts: number; error?: string }> {
-  const { subject } = renderStudioBookingAlertEmail(booking);
+  const { subject, html, text } = renderStudioBookingAlertEmail(booking);
   const result = await dispatchWithRetry(
     booking.reference,
     studioEmail,
     subject,
-    "studio_alert"
+    "studio_alert",
+    0,
+    { html, text }
   );
 
   if (result.success) {
@@ -654,12 +682,14 @@ export async function sendStudioAlertEmail(
 export async function sendReminderEmail(
   booking: Booking
 ): Promise<{ success: boolean; attempts: number; error?: string }> {
-  const { subject } = renderReminderEmail(booking);
+  const { subject, html, text } = renderReminderEmail(booking);
   const result = await dispatchWithRetry(
     booking.reference,
     booking.customerEmail,
     subject,
-    "session_reminder"
+    "session_reminder",
+    0,
+    { html, text }
   );
 
   if (result.success) {

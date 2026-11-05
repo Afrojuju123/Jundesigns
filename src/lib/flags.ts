@@ -2,12 +2,15 @@ import { NextResponse } from "next/server";
 
 /**
  * Feature flag helper for Jun Designs.
- * Defaults to false in production until backend storage (D1) is fully migrated.
+ * Defaults to true now that D1 storage is live, but respects explicit environment overrides.
  */
 export function isBookingsEnabled(): boolean {
   const flag =
     process.env.NEXT_PUBLIC_BOOKINGS_ENABLED ?? process.env.BOOKINGS_ENABLED;
-  return flag === "true";
+  if (flag === undefined) {
+    return true;
+  }
+  return flag === "true" || flag === "1";
 }
 
 export const BOOKING_DISABLED_MESSAGE =
