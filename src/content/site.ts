@@ -38,6 +38,11 @@ export const navigationLinks = [
     ],
   },
   {
+    name: "Schools",
+    href: "/schools",
+    isExternal: false,
+  },
+  {
     name: "Store",
     href: "https://jundesigns.rw/shop/",
     isExternal: true,
@@ -61,6 +66,7 @@ export const footerLinkGroups = [
       { name: "Artisan Shop", href: "https://jundesigns.rw/shop/", isExternal: true },
       { name: "Custom Furniture & Decor", href: "https://jundesigns.rw/custom-work/", isExternal: true },
       { name: "All Cultural Workshops", href: "/workshops", isExternal: false },
+      { name: "Schools & Groups", href: "/schools", isExternal: false },
       { name: "Group & Private Bookings", href: "/contact", isExternal: false },
     ],
   },

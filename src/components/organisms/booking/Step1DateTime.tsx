@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   ChevronLeft,
   ChevronRight,
@@ -8,6 +9,7 @@ import {
   Users,
   AlertCircle,
   Calendar as CalendarIcon,
+  Info,
 } from "lucide-react";
 import { workshops } from "@/content/workshops";
 import { TimeSlot, DayAvailability } from "@/lib/booking/types";
@@ -333,6 +335,27 @@ export const Step1DateTime: React.FC<Step1Props> = ({
           </button>
         </div>
       </div>
+
+      {/* Large Group / School notice when hitting max standard booking capacity */}
+      {guestCount >= bookingConfig.maxGuestsPerBooking && (
+        <div className="p-3.5 bg-brown-950 border border-amber-400/30 rounded-card text-xs text-sand-primary flex items-start gap-2.5">
+          <Info className="w-4 h-4 text-amber shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <span className="font-semibold text-sand-bright block">
+              Planning for a school, university, or large group of 25+?
+            </span>
+            <p className="text-sand-muted leading-relaxed">
+              We offer structured group packages with multiple artisan stations, take-home materials, and volume pricing.{" "}
+              <Link
+                href="/schools"
+                className="text-amber hover:underline font-semibold"
+              >
+                View our Schools &amp; Groups packages &rarr;
+              </Link>
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Action CTA */}
       <div className="pt-2">

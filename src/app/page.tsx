@@ -426,6 +426,35 @@ export default function HomePage() {
         </section>
 
         {/* ========================================================
+            2B. SCHOOLS & GROUPS CALLOUT BAND
+           ======================================================== */}
+        <section className="bg-brown-950 border-b border-amber-400/20 px-4 sm:px-6 lg:px-8 py-10 md:py-12 text-left">
+          <div className="max-w-content mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="space-y-2 max-w-2xl">
+              <span className="font-display text-xs font-bold uppercase tracking-eyebrow text-amber block">
+                Educational Field Trips &bull; Groups 25+
+              </span>
+              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-sand-bright">
+                Bringing a Class or Group?
+              </h3>
+              <p className="font-sans text-sm sm:text-base text-sand-primary leading-relaxed">
+                Structured cultural workshops for primary schools, secondary schools, and universities. Hands-on Imigongo painting, dance, and craft demonstrations with volume pricing from 4,500 RWF per student.
+              </p>
+            </div>
+
+            <div className="shrink-0 w-full md:w-auto">
+              <Link
+                href="/schools"
+                className="inline-flex items-center justify-center gap-2 h-12 px-7 rounded-pill bg-amber text-brown-950 font-display text-xs font-bold uppercase tracking-button hover:bg-amber-400 active:bg-amber-500 shadow-sm transition-all w-full md:w-auto"
+              >
+                <span>Explore School Packages</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
             3. HOW BOOKING WORKS: Simple Horizontal 4-Step Sequence
            ======================================================== */}
         <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-20 max-w-content mx-auto text-left">

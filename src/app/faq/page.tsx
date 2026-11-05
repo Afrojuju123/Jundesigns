@@ -82,7 +82,27 @@ const faqItems: AccordionItem[] = [
   {
     id: "groups",
     question: "Can I book for a group?",
-    answer: "Yes. Choose the number of guests when you book. For large groups, contact us first. Our standard online booking system accepts up to 8 guests per session. For larger delegations, school visits, corporate retreats, or private sessions, please contact our studio team in advance via phone or WhatsApp so we can arrange dedicated artisan instructors.",
+    answer: (
+      <span>
+        Yes. Choose the number of guests when you book. Our standard online booking system accepts up to 8 guests per session. For school groups, university cohorts, or delegations of 25 or more, visit our dedicated{" "}
+        <Link href="/schools" className="text-amber underline font-medium">
+          Schools &amp; Groups page
+        </Link>{" "}
+        to explore multi-station cultural packages with tiered volume pricing.
+      </span>
+    ),
+  },
+  {
+    id: "schools",
+    question: "Do you offer workshops for schools and universities?",
+    answer: (
+      <span>
+        Yes. We host primary, secondary, and higher education groups at Kigali Culture Village, Rebero. We offer three structured packages (Bronze, Silver, Gold) covering Imigongo painting, traditional dance, pottery, and blacksmithing, with volume pricing from 4,500 RWF per student. Teachers attend free.{" "}
+        <Link href="/schools" className="text-amber underline font-medium">
+          See school packages &amp; calculate a quote &rarr;
+        </Link>
+      </span>
+    ),
   },
   {
     id: "payment",

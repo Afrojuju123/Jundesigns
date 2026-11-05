@@ -185,6 +185,14 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
             </div>
 
             <Link
+              href="/schools"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block py-2 font-display text-sm font-bold uppercase tracking-button text-brown-950 hover:text-amber"
+            >
+              Schools &amp; Groups
+            </Link>
+
+            <Link
               href="https://jundesigns.rw/shop/"
               target="_blank"
               rel="noopener noreferrer"

@@ -1,6 +1,10 @@
 import { cookies } from "next/headers";
 
-const COOKIE_NAME = "jun_admin_session";
+export const COOKIE_NAME = "jun_admin_session";
+
+export const ADMIN_COOKIE = {
+  name: COOKIE_NAME,
+};
 
 export async function isAuthenticated(): Promise<boolean> {
   const cookieStore = await cookies();

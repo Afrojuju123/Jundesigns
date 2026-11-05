@@ -393,6 +393,24 @@ export const WorkshopView: React.FC<WorkshopViewProps> = ({
                     {workshop.whatToBring}
                   </p>
                 </div>
+
+                {/* Row 4: Schools & Large Groups */}
+                <div className="pt-6 space-y-2">
+                  <h3 className="font-display font-bold text-xs uppercase tracking-eyebrow text-amber">
+                    — Schools &amp; Groups (25+ Students)
+                  </h3>
+                  <p className="font-sans text-base sm:text-lg text-sand-bright leading-relaxed">
+                    Organising an educational excursion or group of 25 or more? We offer structured multi-activity packages with dedicated artisan stations and tiered volume rates.
+                  </p>
+                  <div>
+                    <Link
+                      href="/schools"
+                      className="inline-flex items-center gap-1.5 font-display font-semibold text-xs uppercase tracking-button text-amber hover:text-amber-300 transition-colors"
+                    >
+                      <span>Explore school packages &rarr;</span>
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
 
