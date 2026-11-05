@@ -1,0 +1,55 @@
+:root {
+  /* Surface & Background Browns */
+  --color-bg-deep: #1F1209;
+  --color-bg-main: #2D1A0D;
+  --color-bg-panel: #3A2311;
+  --color-bg-subtle: #482C15;
+  --color-bg-card: rgba(255, 255, 255, 0.04);
+  --color-bg-card-hover: rgba(255, 255, 255, 0.08);
+
+  /* Light Surface Accents */
+  --color-surface-light: #F9F6F0;
+  --color-surface-white: #FFFFFF;
+
+  /* Accent Amber (The only saturated color, for CTAs and italic emphasis) */
+  --color-amber-primary: #F29C1F;
+  --color-amber-hover: #D9870D;
+  --color-amber-light: #F5B24E;
+  --color-amber-bronze: #B8956A;
+  --color-amber-glow: rgba(242, 156, 31, 0.15);
+
+  /* Alert / Error (Single allowed alert hue) */
+  --color-error: #E06D53;
+  --color-error-bg: rgba(224, 109, 83, 0.12);
+
+  /* Text Colors */
+  --color-text-bright: #FFF8F0;  /* Cream ivory (Headings, titles) */
+  --color-text-primary: #F0E4D6; /* Antique linen */
+  --color-text-body: #C9B8A4;    /* Sand (Body copy on dark) */
+  --color-text-muted: #988574;   /* Muted metadata (WCAG AA 4.70:1) */
+  --color-text-inverse: #1F1209; /* Deep brown text on amber buttons */
+
+  /* Borders */
+  --border-amber-20: rgba(242, 156, 31, 0.20);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+
+  /* Shadows */
+  --shadow-warm-low: 0 8px 32px -4px rgba(15, 8, 3, 0.45);
+  --shadow-drawer: -12px 0 48px 0 rgba(10, 5, 2, 0.65);
+
+  /* Radii scale: 8, 16, 28, 999 */
+  --radius-input: 8px;
+  --radius-card: 16px;
+  --radius-hero: 28px;
+  --radius-pill: 9999px;
+
+  /* Fluid Typography Clamps */
+  --font-size-h1: clamp(3.5rem, 5.5vw + 1rem, 6rem);       /* 56px - 96px */
+  --font-size-h2: clamp(2.25rem, 3vw + 0.5rem, 3.5rem);     /* 36px - 56px */
+  --font-size-h3: clamp(1.375rem, 1.2vw + 0.5rem, 1.75rem); /* 22px - 28px */
+  --font-size-body: clamp(1.0625rem, 0.3vw + 1rem, 1.125rem); /* 17px - 18px */
+  --font-size-small: 0.875rem;                              /* 14px */
+  --font-size-eyebrow: 0.8125rem;                           /* 13px */
+  --line-height-body: 1.65;
+  --max-width-prose: 62ch;
+}

@@ -1,0 +1,116 @@
+@import "./tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: #1F1209;
+    color: #C9B8A4;
+    font-family: var(--font-body), system-ui, sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.65;
+    background-image: radial-gradient(rgba(242, 156, 31, 0.025) 1px, transparent 1px);
+    background-size: 32px 32px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), Georgia, serif;
+    color: #FFF8F0;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+
+  h1 {
+    font-size: var(--font-size-h1);
+  }
+
+  h2 {
+    font-size: var(--font-size-h2);
+  }
+
+  h3 {
+    font-size: var(--font-size-h3);
+  }
+
+  p {
+    max-width: var(--max-width-prose);
+  }
+
+  a, button, input, select, textarea {
+    touch-action: manipulation;
+  }
+
+  :focus-visible {
+    outline: 2px solid #F29C1F;
+    outline-offset: 3px;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .border-amber-20 {
+    border-color: rgba(242, 156, 31, 0.20);
+  }
+
+  .bg-amber-glow {
+    background-color: rgba(242, 156, 31, 0.15);
+  }
+
+  .imigongo-subtle-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 0L80 40L40 80L0 40Z' fill='none' stroke='%23F29C1F' stroke-width='1' stroke-opacity='0.035'/%3E%3C/svg%3E");
+    background-size: 80px 80px;
+  }
+}
+
+/* Accessible animations */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-reveal {
+    animation: fadeUpReveal 350ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes fadeUpReveal {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Print Friendly Styles for In-Person Vouchers & Receipts */
+@media print {
+  header, footer, nav, .print\:hidden {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #1F1209 !important;
+    background-image: none !important;
+    font-size: 12pt !important;
+  }
+  main {
+    background: #ffffff !important;
+    padding: 0 !important;
+    min-height: auto !important;
+  }
+}
