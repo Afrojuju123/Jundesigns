@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { paymentProvider } from "@/lib/booking/payment";
 import { PaymentRequest } from "@/lib/booking/types";
+import { isBookingsEnabled, disabledBookingResponse } from "@/lib/flags";
 
 export async function POST(request: NextRequest) {
+  if (!isBookingsEnabled()) {
+    return disabledBookingResponse();
+  }
+
   try {
     const body: PaymentRequest = await request.json();
 

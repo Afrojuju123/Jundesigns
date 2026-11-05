@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { processDueReminders } from "@/lib/booking/store";
+import { isBookingsEnabled } from "@/lib/flags";
 
 export async function GET(request: NextRequest) {
+  if (!isBookingsEnabled()) {
+    return NextResponse.json({ message: "Cron jobs paused: bookings disabled." });
+  }
+
   try {
     const authHeader = request.headers.get("authorization");
     const secret = process.env.CRON_SECRET;

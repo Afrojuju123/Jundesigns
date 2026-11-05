@@ -4,6 +4,7 @@ import {
   getBookingByReference,
   purgeExpiredHolds,
 } from "@/lib/booking/store";
+import { isBookingsEnabled, disabledBookingResponse } from "@/lib/flags";
 
 // Debounce map: trackingId -> last checked timestamp
 const lastStatusCheckMap = new Map<string, number>();
@@ -12,6 +13,10 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ reference: string }> }
 ) {
+  if (!isBookingsEnabled()) {
+    return disabledBookingResponse();
+  }
+
   const { reference } = await params;
 
   if (!reference) {

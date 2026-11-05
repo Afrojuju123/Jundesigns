@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { X, ArrowLeft } from "lucide-react";
+import { X, ArrowLeft, Calendar, MessageSquare, Phone } from "lucide-react";
 import { workshops } from "@/content/workshops";
 import { TimeSlot, Booking } from "@/lib/booking/types";
+import { isBookingsEnabled } from "@/lib/flags";
 import { Step1DateTime } from "./booking/Step1DateTime";
 import { Step2Review } from "./booking/Step2Review";
 import { Step3Payment } from "./booking/Step3Payment";
@@ -255,132 +256,199 @@ const BookingDrawerContent: React.FC<BookingDrawerProps> = ({
             "h-full sm:h-auto"
           )}
         >
-          {/* Top Bar: Progress Indicator & Navigation */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between border-b border-amber-400/20 pb-4">
-              <div className="flex items-center gap-3">
-                {currentStep > 1 && currentStep < 4 && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (currentStep === 2) handleStep2Back();
-                      if (currentStep === 3) handleStep3Back();
-                    }}
-                    className="p-1 rounded-sm text-sand-primary hover:text-amber transition-colors"
-                    aria-label="Back to previous step"
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                  </button>
-                )}
+          {!isBookingsEnabled() ? (
+            <div className="flex flex-col h-full justify-between space-y-8">
+              <div className="flex items-center justify-between border-b border-amber-400/20 pb-4">
                 <div>
                   <span className="font-display text-[11px] font-bold uppercase tracking-eyebrow text-amber block">
-                    — STEP {currentStep} OF 4
+                    — WORKSHOP RESERVATIONS
                   </span>
                   <h2
                     id="booking-flow-title"
                     className="font-serif font-bold text-xl sm:text-2xl text-sand-bright"
                   >
-                    {currentStep === 1 && "Choose Date & Time"}
-                    {currentStep === 2 && "Review & Your Details"}
-                    {currentStep === 3 && "Secure Payment"}
-                    {currentStep === 4 && "Booking Confirmed"}
+                    Online Booking
                   </h2>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  className="p-2 rounded-sm text-sand-muted hover:text-sand-bright hover:bg-brown-800 transition-colors"
+                  aria-label="Close booking sheet"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="my-auto py-8 text-center space-y-6">
+                <div className="w-16 h-16 rounded-full bg-amber/15 border border-amber/30 text-amber flex items-center justify-center mx-auto">
+                  <Calendar className="w-8 h-8" />
+                </div>
+                <div className="space-y-3 max-w-md mx-auto">
+                  <h3 className="font-serif font-bold text-2xl text-sand-bright">
+                    Online Booking Opens Soon
+                  </h3>
+                  <p className="font-sans text-sm sm:text-base text-sand-primary leading-relaxed">
+                    Online booking opens soon. To reserve now, message us on WhatsApp or call +250 780 324 944.
+                  </p>
+                </div>
+
+                <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center max-w-sm mx-auto">
+                  <a
+                    href="https://wa.me/250780324944?text=Hello%20Jun%20Designs%2C%20I%20would%20like%20to%20reserve%20a%20cultural%20workshop."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-button font-display text-xs font-bold uppercase tracking-button bg-amber text-brown-950 hover:bg-amber-400 transition-colors shadow-warm-low"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                    <span>Reserve on WhatsApp</span>
+                  </a>
+                  <a
+                    href="tel:+250780324944"
+                    className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-button font-display text-xs font-bold uppercase tracking-button bg-brown-850 text-sand-bright hover:bg-brown-800 border border-amber-400/20 transition-colors"
+                  >
+                    <Phone className="w-4 h-4 text-amber" />
+                    <span>Call Studio</span>
+                  </a>
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={handleClose}
-                className="p-2 rounded-sm text-sand-muted hover:text-sand-bright hover:bg-brown-800 transition-colors"
-                aria-label="Close booking sheet"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <div className="pt-6 border-t border-amber-400/15 text-center">
+                <p className="font-sans text-xs text-sand-muted">
+                  Daily sessions at 10:00am &amp; 4:00pm &bull; Kigali Culture Village, Rebero
+                </p>
+              </div>
             </div>
+          ) : (
+            <>
+              {/* Top Bar: Progress Indicator & Navigation */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between border-b border-amber-400/20 pb-4">
+                  <div className="flex items-center gap-3">
+                    {currentStep > 1 && currentStep < 4 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (currentStep === 2) handleStep2Back();
+                          if (currentStep === 3) handleStep3Back();
+                        }}
+                        className="p-1 rounded-sm text-sand-primary hover:text-amber transition-colors"
+                        aria-label="Back to previous step"
+                      >
+                        <ArrowLeft className="w-4 h-4" />
+                      </button>
+                    )}
+                    <div>
+                      <span className="font-display text-[11px] font-bold uppercase tracking-eyebrow text-amber block">
+                        — STEP {currentStep} OF 4
+                      </span>
+                      <h2
+                        id="booking-flow-title"
+                        className="font-serif font-bold text-xl sm:text-2xl text-sand-bright"
+                      >
+                        {currentStep === 1 && "Choose Date & Time"}
+                        {currentStep === 2 && "Review & Your Details"}
+                        {currentStep === 3 && "Secure Payment"}
+                        {currentStep === 4 && "Booking Confirmed"}
+                      </h2>
+                    </div>
+                  </div>
 
-            {/* Step Progress Line */}
-            <div className="w-full bg-brown-950 h-1 rounded-full overflow-hidden">
-              <div
-                className="bg-amber h-full transition-all duration-300 ease-out"
-                style={{ width: `${(currentStep / 4) * 100}%` }}
-              />
-            </div>
-          </div>
+                  <button
+                    type="button"
+                    onClick={handleClose}
+                    className="p-2 rounded-sm text-sand-muted hover:text-sand-bright hover:bg-brown-800 transition-colors"
+                    aria-label="Close booking sheet"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
 
-          {/* Step Views */}
-          <div className="my-6 flex-1">
-            {currentStep === 1 && (
-              <Step1DateTime
-                workshopSlug={workshopSlug}
-                onSelectWorkshop={(slug) => {
-                  setWorkshopSlug(slug);
-                  updateUrlParams(1, slug, selectedDate, selectedSlot, guestCount);
-                }}
-                selectedDate={selectedDate}
-                onSelectDate={(date) => {
-                  setSelectedDate(date);
-                  updateUrlParams(1, workshopSlug, date, selectedSlot, guestCount);
-                }}
-                selectedSlot={selectedSlot}
-                onSelectSlot={(slot) => {
-                  setSelectedSlot(slot);
-                  updateUrlParams(1, workshopSlug, selectedDate, slot, guestCount);
-                }}
-                guestCount={guestCount}
-                onChangeGuests={(count) => {
-                  setGuestCount(count);
-                  updateUrlParams(1, workshopSlug, selectedDate, selectedSlot, count);
-                }}
-                onContinue={handleStep1Continue}
-              />
-            )}
+                {/* Step Progress Line */}
+                <div className="w-full bg-brown-950 h-1 rounded-full overflow-hidden">
+                  <div
+                    className="bg-amber h-full transition-all duration-300 ease-out"
+                    style={{ width: `${(currentStep / 4) * 100}%` }}
+                  />
+                </div>
+              </div>
 
-            {currentStep === 2 && (
-              <Step2Review
-                workshopSlug={workshopSlug}
-                selectedDate={selectedDate}
-                selectedSlot={selectedSlot}
-                guestCount={guestCount}
-                customerName={customerName}
-                onChangeName={setCustomerName}
-                customerEmail={customerEmail}
-                onChangeEmail={setCustomerEmail}
-                customerPhone={customerPhone}
-                onChangePhone={setCustomerPhone}
-                customerCountry={customerCountry}
-                onChangeCountry={setCustomerCountry}
-                customerNote={customerNote}
-                onChangeNote={setCustomerNote}
-                onBack={handleStep2Back}
-                onSubmit={handleCreateHold}
-                isHolding={isHolding}
-                holdError={holdError}
-              />
-            )}
+              {/* Step Views */}
+              <div className="my-6 flex-1">
+                {currentStep === 1 && (
+                  <Step1DateTime
+                    workshopSlug={workshopSlug}
+                    onSelectWorkshop={(slug) => {
+                      setWorkshopSlug(slug);
+                      updateUrlParams(1, slug, selectedDate, selectedSlot, guestCount);
+                    }}
+                    selectedDate={selectedDate}
+                    onSelectDate={(date) => {
+                      setSelectedDate(date);
+                      updateUrlParams(1, workshopSlug, date, selectedSlot, guestCount);
+                    }}
+                    selectedSlot={selectedSlot}
+                    onSelectSlot={(slot) => {
+                      setSelectedSlot(slot);
+                      updateUrlParams(1, workshopSlug, selectedDate, slot, guestCount);
+                    }}
+                    guestCount={guestCount}
+                    onChangeGuests={(count) => {
+                      setGuestCount(count);
+                      updateUrlParams(1, workshopSlug, selectedDate, selectedSlot, count);
+                    }}
+                    onContinue={handleStep1Continue}
+                  />
+                )}
 
-            {currentStep === 3 && activeBooking && (
-              <Step3Payment
-                booking={activeBooking}
-                onPaymentSuccess={handlePaymentSuccess}
-                onHoldExpired={handleHoldExpired}
-                onBack={handleStep3Back}
-              />
-            )}
+                {currentStep === 2 && (
+                  <Step2Review
+                    workshopSlug={workshopSlug}
+                    selectedDate={selectedDate}
+                    selectedSlot={selectedSlot}
+                    guestCount={guestCount}
+                    customerName={customerName}
+                    onChangeName={setCustomerName}
+                    customerEmail={customerEmail}
+                    onChangeEmail={setCustomerEmail}
+                    customerPhone={customerPhone}
+                    onChangePhone={setCustomerPhone}
+                    customerCountry={customerCountry}
+                    onChangeCountry={setCustomerCountry}
+                    customerNote={customerNote}
+                    onChangeNote={setCustomerNote}
+                    onBack={handleStep2Back}
+                    onSubmit={handleCreateHold}
+                    isHolding={isHolding}
+                    holdError={holdError}
+                  />
+                )}
 
-            {currentStep === 4 && activeBooking && (
-              <Step4Confirmation
-                booking={activeBooking}
-                onClose={handleClose}
-              />
-            )}
-          </div>
+                {currentStep === 3 && activeBooking && (
+                  <Step3Payment
+                    booking={activeBooking}
+                    onPaymentSuccess={handlePaymentSuccess}
+                    onHoldExpired={handleHoldExpired}
+                    onBack={handleStep3Back}
+                  />
+                )}
 
-          {/* Footer note for assurance (No fake badges) */}
-          <div className="pt-4 border-t border-amber-400/15 text-center">
-            <span className="font-sans text-[11px] text-sand-muted block">
-              Jun Designs LTD &middot; Kigali Culture Village, Rebero &middot; +250 780 324 944
-            </span>
-          </div>
+                {currentStep === 4 && activeBooking && (
+                  <Step4Confirmation
+                    booking={activeBooking}
+                    onClose={handleClose}
+                  />
+                )}
+              </div>
+
+              {/* Footer note for assurance (No fake badges) */}
+              <div className="pt-4 border-t border-amber-400/15 text-center">
+                <span className="font-sans text-[11px] text-sand-muted block">
+                  Jun Designs LTD &middot; Kigali Culture Village, Rebero &middot; +250 780 324 944
+                </span>
+              </div>
+            </>
+          )}
         </aside>
       </div>
     </div>

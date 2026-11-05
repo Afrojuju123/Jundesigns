@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/booking/admin-auth";
 import { cancelBooking } from "@/lib/booking/store";
+import { isBookingsEnabled, disabledAdminResponse } from "@/lib/flags";
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ reference: string }> }
 ) {
+  if (!isBookingsEnabled()) {
+    return disabledAdminResponse();
+  }
+
   const authed = await isAuthenticated();
   if (!authed) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

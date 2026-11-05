@@ -1,0 +1,9 @@
+# Cloudflare Workers local development secrets template (.dev.vars)
+BOOKINGS_ENABLED=false
+ADMIN_PASSWORD=
+SESSION_SECRET=
+PESAPAL_ENV=sandbox
+PESAPAL_CONSUMER_KEY=
+PESAPAL_CONSUMER_SECRET=
+PESAPAL_IPN_ID=
+APP_URL=http://localhost:8787

@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { applyPesapalStatusTransition } from "@/lib/booking/store";
+import { isBookingsEnabled, disabledBookingResponse } from "@/lib/flags";
 
 export async function GET(request: NextRequest) {
+  if (!isBookingsEnabled()) {
+    return disabledBookingResponse();
+  }
+
   const { searchParams } = new URL(request.url);
   const orderTrackingId =
     searchParams.get("OrderTrackingId") ||
@@ -11,10 +16,6 @@ export async function GET(request: NextRequest) {
     searchParams.get("OrderMerchantReference") ||
     searchParams.get("orderMerchantReference") ||
     "";
-  const orderNotificationType =
-    searchParams.get("OrderNotificationType") ||
-    searchParams.get("orderNotificationType") ||
-    "IPNCHANGE";
 
   if (!orderTrackingId) {
     return NextResponse.json(
@@ -54,6 +55,10 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  if (!isBookingsEnabled()) {
+    return disabledBookingResponse();
+  }
+
   // Support POST webhook payloads as well
   let orderTrackingId = "";
   let orderMerchantReference = "";

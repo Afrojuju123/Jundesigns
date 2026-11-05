@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDayAvailability } from "@/lib/booking/store";
+import { isBookingsEnabled, disabledBookingResponse } from "@/lib/flags";
 
 export async function GET(request: NextRequest) {
+  if (!isBookingsEnabled()) {
+    return disabledBookingResponse();
+  }
+
   const searchParams = request.nextUrl.searchParams;
   const workshopSlug = searchParams.get("workshop");
   const date = searchParams.get("date");

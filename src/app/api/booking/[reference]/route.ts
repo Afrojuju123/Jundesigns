@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getBookingByReference } from "@/lib/booking/store";
+import { isBookingsEnabled, disabledBookingResponse } from "@/lib/flags";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ reference: string }> }
 ) {
+  if (!isBookingsEnabled()) {
+    return disabledBookingResponse();
+  }
+
   const { reference } = await params;
 
   if (!reference) {
