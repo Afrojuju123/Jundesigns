@@ -11,8 +11,8 @@
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit",
     "test:header": "playwright test tests/universal-header.spec.ts",
+    "type-check": "tsc --noEmit",
     "secretlint": "secretlint \"**/*\"",
     "prepare": "husky"
   },
