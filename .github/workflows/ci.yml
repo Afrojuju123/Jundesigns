@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Lint, Test, Typecheck & Build
+    runs-on: ubuntu-latest
+
+    env:
+      PESAPAL_ENV: sandbox
+      PESAPAL_CONSUMER_KEY: ci-placeholder-key
+      PESAPAL_CONSUMER_SECRET: ci-placeholder-secret
+      PESAPAL_IPN_ID: 00000000-0000-0000-0000-000000000000
+      APP_URL: http://localhost:3000
+      ADMIN_PASSWORD: ci-placeholder-admin-password
+      CRON_SECRET: ci-placeholder-cron-secret
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.2.0
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Secret Scan (secretlint)
+        run: npm run secretlint
+
+      - name: Code style and lint
+        run: npm run lint
+
+      - name: TypeScript type verification
+        run: npx tsc --noEmit
+
+      - name: Next.js production build
+        run: npm run build
