@@ -8,6 +8,7 @@ node_modules/
 out/
 build/
 dist/
+*.tsbuildinfo
 
 # Environment Files (CRITICAL: Never commit secrets)
 .env
@@ -34,6 +35,8 @@ dist/
 # Testing & Coverage
 coverage/
 *.lcov
+test-results/
+playwright-report/
 
 # Debug Logs
 *.log
