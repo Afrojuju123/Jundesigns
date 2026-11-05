@@ -12,6 +12,8 @@
     "start": "next start",
     "lint": "next lint",
     "test:header": "playwright test tests/universal-header.spec.ts",
+    "test:mobile-nav": "playwright test tests/mobile-nav.spec.ts",
+    "test:audit": "playwright test tests/site-audit-crawler.spec.ts",
     "type-check": "tsc --noEmit",
     "test:d1": "playwright test tests/d1-store.spec.ts",
     "secretlint": "secretlint \"**/*\"",

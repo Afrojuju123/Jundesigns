@@ -19,5 +19,23 @@ export default defineConfig({
         viewport: { width: 1280, height: 720 },
       },
     },
+    {
+      name: "mobile-390",
+      use: {
+        channel: "msedge",
+        viewport: { width: 390, height: 844 },
+        isMobile: true,
+        hasTouch: true,
+      },
+    },
+    {
+      name: "mobile-360",
+      use: {
+        channel: "msedge",
+        viewport: { width: 360, height: 800 },
+        isMobile: true,
+        hasTouch: true,
+      },
+    },
   ],
 });
