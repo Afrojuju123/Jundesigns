@@ -18,7 +18,7 @@ import { GalleryGrid, GalleryItem } from "@/components/organisms/GalleryGrid";
 import { CardGrid } from "@/components/molecules/CardGrid";
 import { WorkshopCard } from "@/components/molecules/WorkshopCard";
 import { StickyBookBar } from "@/components/molecules/StickyBookBar";
-import { siteConfig } from "@/content/site";
+import { siteConfig, STORE_LINKS_ENABLED } from "@/content/site";
 import { workshops } from "@/content/workshops";
 import { useBookingDrawer } from "@/context/BookingDrawerContext";
 import { formatRwf } from "@/lib/utils";
@@ -160,15 +160,28 @@ export default function HomePage() {
                   Explore workshops
                 </Button>
 
-                <a
-                  href={siteConfig.externalLinks.shop}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="secondary" size="lg">
-                    Artisan store
+                {STORE_LINKS_ENABLED ? (
+                  <a
+                    href={siteConfig.externalLinks.shop}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="secondary" size="lg">
+                      Artisan store
+                    </Button>
+                  </a>
+                ) : (
+                  <Button
+                    variant="secondary"
+                    size="lg"
+                    aria-disabled="true"
+                    tabIndex={-1}
+                    className="opacity-50 cursor-default hover:bg-transparent hover:text-sand-muted"
+                  >
+                    <span>Artisan store</span>
+                    <span className="sr-only">(Coming soon)</span>
                   </Button>
-                </a>
+                )}
               </div>
 
               {/* Understated Line of Facts (No Icon Tiles) */}
@@ -393,15 +406,26 @@ export default function HomePage() {
               </div>
 
               <div className="pt-2">
-                <a
-                  href={siteConfig.externalLinks.shop}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 font-display font-bold text-sm uppercase tracking-button text-amber hover:text-amber-300 transition-colors"
-                >
-                  <span>Explore the artisan store</span>
-                  <ArrowUpRight className="w-4 h-4" />
-                </a>
+                {STORE_LINKS_ENABLED ? (
+                  <a
+                    href={siteConfig.externalLinks.shop}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 font-display font-bold text-sm uppercase tracking-button text-amber hover:text-amber-300 transition-colors"
+                  >
+                    <span>Explore the artisan store</span>
+                    <ArrowUpRight className="w-4 h-4" />
+                  </a>
+                ) : (
+                  <span
+                    aria-disabled="true"
+                    tabIndex={-1}
+                    className="inline-flex items-center gap-1.5 font-display font-bold text-sm uppercase tracking-button text-stone-400 cursor-default select-none"
+                  >
+                    <span>Explore the artisan store</span>
+                    <span className="text-xs font-mono uppercase tracking-wider text-stone-400/80">(Coming soon)</span>
+                  </span>
+                )}
               </div>
             </div>
           </div>

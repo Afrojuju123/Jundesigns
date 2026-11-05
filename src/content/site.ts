@@ -1,5 +1,7 @@
 import { SiteConfig } from "@/types";
 
+export const STORE_LINKS_ENABLED = false;
+
 export const siteConfig: SiteConfig = {
   name: "Jun Designs LTD",
   tagline: "Authentic Cultural Workshops & Artisan Studio",
@@ -33,7 +35,7 @@ export const navigationLinks = [
     children: [
       { name: "Imigongo Painting", href: "/workshops/imigongo-painting", desc: "Traditional geometric relief art with natural pigments" },
       { name: "Traditional Dance", href: "/workshops/traditional-dance", desc: "Intore rhythm, ingoma drumming & royal movement" },
-      { name: "Hand Weaving", href: "/workshops/hand-weaving", desc: "Sisal fiber spinning & Agaseke basket craftsmanship" },
+      { name: "Carpet Hand-Weaving", href: "/workshops/hand-weaving", desc: "Sisal fiber spinning & Agaseke basket craftsmanship" },
       { name: "Igisoro Game", href: "/workshops/igisoro-game", desc: "Ancient 16-pit mancala board strategy & rules" },
     ],
   },

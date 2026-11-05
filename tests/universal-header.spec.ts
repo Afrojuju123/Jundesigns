@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { STORE_LINKS_ENABLED } from "../src/content/site";
 
 const publicRoutes = [
   "/",
@@ -23,7 +24,7 @@ const publicRoutes = [
 test.describe("Universal Header & Footer Verification", () => {
   for (const route of publicRoutes) {
     test(`route ${route} has exactly one universal header and footer`, async ({ page }) => {
-      await page.goto(route);
+      await page.goto(route, { waitUntil: "domcontentloaded" });
 
       // 1. Exactly one banner element (Header)
       const banner = page.getByRole("banner");
@@ -43,11 +44,25 @@ test.describe("Universal Header & Footer Verification", () => {
         const navItem = banner.getByText(navText, { exact: false });
         await expect(navItem.first()).toBeVisible();
       }
+
+      // 5. Store and Custom Orders interactive vs disabled behavior based on flag
+      if (STORE_LINKS_ENABLED) {
+        await expect(banner.locator('a:has-text("Store")')).toHaveCount(1);
+        await expect(banner.locator('a:has-text("Custom Orders")')).toHaveCount(1);
+      } else {
+        const disabledStore = banner.locator('span[aria-disabled="true"]:has-text("Store")');
+        await expect(disabledStore.first()).toBeVisible();
+        await expect(banner.locator('a:has-text("Store")')).toHaveCount(0);
+
+        const disabledCustom = banner.locator('span[aria-disabled="true"]:has-text("Custom Orders")');
+        await expect(disabledCustom.first()).toBeVisible();
+        await expect(banner.locator('a:has-text("Custom Orders")')).toHaveCount(0);
+      }
     });
   }
 
   test("admin shell does NOT contain public header or footer", async ({ page }) => {
-    await page.goto("/admin");
+    await page.goto("/admin", { waitUntil: "domcontentloaded" });
 
     // Assert that /admin does not render the public site header or footer
     const publicBanner = page.locator('header[role="banner"]');

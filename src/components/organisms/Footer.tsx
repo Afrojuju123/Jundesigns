@@ -9,7 +9,7 @@ import {
   Instagram,
   Compass,
 } from "lucide-react";
-import { siteConfig, footerLinkGroups } from "@/content/site";
+import { siteConfig, footerLinkGroups, STORE_LINKS_ENABLED } from "@/content/site";
 
 export const Footer: React.FC = () => {
   return (
@@ -89,21 +89,42 @@ export const Footer: React.FC = () => {
                 — {group.title}
               </h4>
               <ul className="space-y-2">
-                {group.links.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      target={link.isExternal ? "_blank" : undefined}
-                      rel={link.isExternal ? "noopener noreferrer" : undefined}
-                      className="inline-flex items-center gap-1 font-sans text-xs md:text-sm text-brown-800 hover:text-amber transition-colors"
-                    >
-                      <span>{link.name}</span>
-                      {link.isExternal && (
-                        <ArrowUpRight className="w-3.5 h-3.5 text-brown-400" />
-                      )}
-                    </Link>
-                  </li>
-                ))}
+                {group.links.map((link) => {
+                  const isStoreLink =
+                    link.href === siteConfig.externalLinks.shop ||
+                    link.href === siteConfig.externalLinks.customOrders;
+
+                  if (isStoreLink && !STORE_LINKS_ENABLED) {
+                    return (
+                      <li key={link.name}>
+                        <span
+                          aria-disabled="true"
+                          tabIndex={-1}
+                          className="inline-flex items-center gap-1 font-sans text-xs md:text-sm text-stone-400 cursor-default select-none"
+                        >
+                          <span>{link.name}</span>
+                          <span className="sr-only">(Coming soon)</span>
+                        </span>
+                      </li>
+                    );
+                  }
+
+                  return (
+                    <li key={link.name}>
+                      <Link
+                        href={link.href}
+                        target={link.isExternal ? "_blank" : undefined}
+                        rel={link.isExternal ? "noopener noreferrer" : undefined}
+                        className="inline-flex items-center gap-1 font-sans text-xs md:text-sm text-brown-800 hover:text-amber transition-colors"
+                      >
+                        <span>{link.name}</span>
+                        {link.isExternal && (
+                          <ArrowUpRight className="w-3.5 h-3.5 text-brown-400" />
+                        )}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
