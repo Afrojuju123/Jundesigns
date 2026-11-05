@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { Eyebrow } from "@/components/atoms/Eyebrow";
 import { SectionHeading } from "@/components/atoms/SectionHeading";
+import { CardGrid } from "@/components/molecules/CardGrid";
 import { SCHOOL_ACTIVITIES } from "@/data/schools";
 
 const ACTIVITY_DESCRIPTIONS: Record<string, { desc: string; takeaway?: string }> = {
@@ -63,57 +64,54 @@ export const SchoolsActivities: React.FC = () => {
           </p>
         </div>
 
-        {/* Staggered Grid of 8 Activities */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-          {activityList.map((activity, idx) => {
-            const isOffset = idx % 2 === 1;
+        {/* Equal Aligned Grid of 8 Activities */}
+        <CardGrid columns={2}>
+          {activityList.map((activity) => {
             const meta = ACTIVITY_DESCRIPTIONS[activity.id] || { desc: activity.name };
             const typeInfo = TYPE_LABELS[activity.type] || { label: activity.type, colorClass: "bg-stone-800 text-stone-200" };
 
             return (
               <article
                 key={activity.id}
-                className={`rounded-card bg-brown-850 border border-amber-400/20 p-6 sm:p-7 flex flex-col justify-between space-y-5 shadow-warm-low hover:border-amber-400/50 transition-all ${
-                  isOffset ? "md:mt-8" : ""
-                }`}
+                className="rounded-card bg-brown-850 border border-amber-400/20 p-6 sm:p-7 flex flex-col h-full shadow-warm-low hover:border-amber-400/50 transition-all select-none"
               >
-                <div className="space-y-4">
-                  <div className="relative aspect-[16/10] rounded-card overflow-hidden border border-amber-400/20 bg-brown-900">
-                    <Image
-                      src={activity.image}
-                      alt={activity.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 550px"
-                      className="object-cover transition-transform duration-smooth hover:scale-105"
-                    />
-                    <div className="absolute top-3 left-3">
-                      <span
-                        className={`inline-block px-3 py-1 rounded-pill text-[11px] font-display font-bold uppercase tracking-wider border backdrop-blur-md ${typeInfo.colorClass}`}
-                      >
-                        {typeInfo.label}
-                      </span>
-                    </div>
+                <div className="relative aspect-[4/3] w-full rounded-card overflow-hidden border border-amber-400/20 bg-brown-900 mb-5 shrink-0">
+                  <Image
+                    src={activity.image}
+                    alt={activity.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 550px"
+                    className="object-cover transition-transform duration-smooth hover:scale-105"
+                  />
+                  <div className="absolute top-3 left-3">
+                    <span
+                      className={`inline-block px-3 py-1 rounded-pill text-[11px] font-display font-bold uppercase tracking-wider border backdrop-blur-md ${typeInfo.colorClass}`}
+                    >
+                      {typeInfo.label}
+                    </span>
                   </div>
+                </div>
 
-                  <h3 className="font-serif text-xl sm:text-2xl font-bold text-sand-bright">
+                <div className="flex flex-col flex-1">
+                  <h3 className="font-serif text-xl sm:text-2xl font-bold text-sand-bright line-clamp-2 min-h-[3.5rem] flex items-center">
                     {activity.name}
                   </h3>
 
-                  <p className="font-sans text-sm sm:text-base text-sand-primary leading-relaxed">
+                  <p className="font-sans text-sm sm:text-base text-sand-primary leading-relaxed line-clamp-2 min-h-[3rem] mt-2">
                     {meta.desc}
                   </p>
-                </div>
 
-                {meta.takeaway && (
-                  <div className="pt-4 border-t border-amber-400/15 text-xs font-mono text-sand-muted flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber shrink-0" />
-                    <span>{meta.takeaway}</span>
-                  </div>
-                )}
+                  {meta.takeaway && (
+                    <div className="mt-auto pt-4 border-t border-amber-400/15 text-xs font-mono text-sand-muted flex items-start gap-2 min-h-[3rem]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber shrink-0 mt-1" />
+                      <span className="line-clamp-2">{meta.takeaway}</span>
+                    </div>
+                  )}
+                </div>
               </article>
             );
           })}
-        </div>
+        </CardGrid>
       </div>
     </section>
   );
