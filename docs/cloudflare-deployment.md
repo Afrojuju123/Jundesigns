@@ -88,3 +88,37 @@ When `BOOKINGS_ENABLED="false"`:
 - **API Booking Routes** (`/api/booking/*`): Safely return HTTP 503 with informative JSON message.
 - **Admin Portal** (`/admin`): Renders a calm maintenance screen without exposing internal routes.
 - **Schools & Groups Quote Flow** (`/schools/request-quote`): Remains functional as an inquiry/email channel with fallbacks.
+
+---
+
+## 6. Phase B: Cloudflare D1 Database & Migrations
+
+The database is bound in `wrangler.jsonc` as:
+- **Binding Name**: `DB`
+- **Database Name**: `jundesigns-db`
+- **Database ID**: `a033c6a6-13e5-4c10-aa67-df5b41682e02`
+
+### Remote Cloudflare D1 Migration Commands
+Run these in your terminal after logging into Wrangler (`npx wrangler login`):
+
+```bash
+# 1. Apply initial schema (tables & indices)
+npx wrangler d1 execute jundesigns-db --remote --file=./migrations/0001_initial_schema.sql
+
+# 2. Seed historical bookings & admin configuration
+npx wrangler d1 execute jundesigns-db --remote --file=./migrations/0002_seed_data.sql
+
+# 3. Verify remote database records
+npx wrangler d1 execute jundesigns-db --remote --command="SELECT count(*) as total, count(case when status='paid' then 1 end) as paid FROM bookings"
+```
+
+### Local Development Migrations
+```bash
+# Apply schema to local SQLite state (.wrangler/state/v3/d1)
+npx wrangler d1 execute jundesigns-db --local --file=./migrations/0001_initial_schema.sql
+npx wrangler d1 execute jundesigns-db --local --file=./migrations/0002_seed_data.sql
+
+# Run automated integration tests against local D1
+npm run test:d1
+```
+

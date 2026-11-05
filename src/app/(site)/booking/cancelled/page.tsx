@@ -35,7 +35,7 @@ export default async function BookingCancelledPage({ searchParams }: CancelledPa
     await cancelBooking(ref, "User cancelled on payment gateway");
   }
 
-  const booking = ref ? getBookingByReference(ref) : undefined;
+  const booking = ref ? await getBookingByReference(ref) : undefined;
 
   const isRefunded = statusParam === "refunded" || booking?.status === "refunded";
   const isFailed = statusParam === "failed" || booking?.status === "failed";

@@ -26,8 +26,8 @@ export async function GET(
     );
   }
 
-  purgeExpiredHolds();
-  let booking = getBookingByReference(reference.toUpperCase());
+  await purgeExpiredHolds();
+  let booking = await getBookingByReference(reference.toUpperCase());
 
   if (!booking) {
     return NextResponse.json(

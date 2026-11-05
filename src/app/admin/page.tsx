@@ -4,9 +4,9 @@ import { isAuthenticated } from "@/lib/booking/admin-auth";
 import {
   getUpcomingBookingsGrouped,
   getAllBookings,
+  getAdminConfig,
 } from "@/lib/booking/store";
 import { getEmailAuditLog } from "@/lib/booking/email";
-import { bookingConfig } from "@/lib/booking/config";
 import { isBookingsEnabled } from "@/lib/flags";
 import { AdminDashboardClient } from "./AdminDashboardClient";
 import { AdminLoginView } from "./AdminLoginView";
@@ -41,15 +41,10 @@ export default async function AdminPage() {
     return <AdminLoginView />;
   }
 
-  const upcomingGrouped = getUpcomingBookingsGrouped();
-  const allBookings = getAllBookings();
+  const upcomingGrouped = await getUpcomingBookingsGrouped();
+  const allBookings = await getAllBookings();
   const emailLogs = getEmailAuditLog();
-
-  const currentConfig = {
-    capacityPerSlot: bookingConfig.capacityPerSlot,
-    blockedDates: bookingConfig.blockedDates,
-    cancellationPolicyText: bookingConfig.cancellationPolicyText,
-  };
+  const currentConfig = await getAdminConfig();
 
   return (
     <AdminDashboardClient

@@ -13,7 +13,7 @@ export class MockPaymentProvider implements PaymentProvider {
   name = "Mock Payment Gateway (Stripe / Flutterwave / MTN MoMo / Airtel Money)";
 
   async processPayment(req: PaymentRequest): Promise<PaymentResult> {
-    const booking = getBookingByReference(req.bookingReference);
+    const booking = await getBookingByReference(req.bookingReference);
     if (!booking) {
       return {
         success: false,
@@ -90,7 +90,7 @@ export class PesapalPaymentProvider implements PaymentProvider {
   name = "Pesapal API 3.0";
 
   async processPayment(req: PaymentRequest): Promise<PaymentResult> {
-    const booking = getBookingByReference(req.bookingReference);
+    const booking = await getBookingByReference(req.bookingReference);
     if (!booking) {
       return {
         success: false,

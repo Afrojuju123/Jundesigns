@@ -13,6 +13,7 @@
     "lint": "next lint",
     "test:header": "playwright test tests/universal-header.spec.ts",
     "type-check": "tsc --noEmit",
+    "test:d1": "playwright test tests/d1-store.spec.ts",
     "secretlint": "secretlint \"**/*\"",
     "prepare": "husky"
   },

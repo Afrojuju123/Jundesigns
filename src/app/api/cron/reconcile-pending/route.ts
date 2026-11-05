@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  const allBookings = getAllBookings();
+  const allBookings = await getAllBookings();
   const pending = allBookings.filter(
     (b) =>
       (b.status === "payment_pending" || b.status === "held") &&

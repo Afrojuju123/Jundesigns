@@ -10,6 +10,14 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "jundesigns-db",
+      "database_id": "a033c6a6-13e5-4c10-aa67-df5b41682e02",
+      "migrations_dir": "migrations"
+    }
+  ],
   "observability": {
     "enabled": true
   }

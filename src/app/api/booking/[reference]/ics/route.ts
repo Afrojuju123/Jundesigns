@@ -17,7 +17,7 @@ export async function GET(
     return NextResponse.json({ error: "Missing booking reference." }, { status: 400 });
   }
 
-  const booking = getBookingByReference(reference.toUpperCase());
+  const booking = await getBookingByReference(reference.toUpperCase());
 
   if (!booking) {
     return NextResponse.json({ error: "Booking reference not found." }, { status: 404 });

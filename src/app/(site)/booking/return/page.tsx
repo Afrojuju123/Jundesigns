@@ -46,7 +46,7 @@ export default async function BookingReturnPage({ searchParams }: ReturnPageProp
 
   // Fallback check
   if (bookingReference) {
-    const b = getBookingByReference(bookingReference);
+    const b = await getBookingByReference(bookingReference);
     if (b && b.status === "paid") {
       redirect(`/booking/${bookingReference}?confirmed=1`);
     } else {

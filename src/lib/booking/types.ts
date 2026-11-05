@@ -29,6 +29,7 @@ export interface Booking {
   paymentReference?: string;
   paymentProvider?: "pesapal" | "card" | "momo" | "airtel";
   pesapalOrderTrackingId?: string;
+  pesapalMerchantReference?: string;
   pesapalConfirmationCode?: string;
   pesapalPaymentMethod?: string;
   pesapalPaymentAccount?: string;

@@ -41,7 +41,7 @@ export default async function AdminBookingDetailPage({ params }: PageProps) {
   }
 
   const { reference } = await params;
-  const booking = getBookingByReference(reference);
+  const booking = await getBookingByReference(reference);
 
   if (!booking) {
     return (

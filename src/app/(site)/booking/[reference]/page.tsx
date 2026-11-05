@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getBookingByReference } from "@/lib/booking/store";
+import { getBookingByReference, getAdminConfig } from "@/lib/booking/store";
 import { bookingConfig } from "@/lib/booking/config";
 import { formatBookingDate, formatSlotLabel } from "@/lib/booking/email";
 import { workshops } from "@/content/workshops";
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BookingConfirmationPage({ params }: PageProps) {
   const { reference } = await params;
-  const booking = getBookingByReference(reference);
+  const booking = await getBookingByReference(reference);
 
   if (!booking) {
     return (

@@ -34,6 +34,7 @@ cloudflare-env.d.ts
 
 # Database Dumps & Local Databases
 *.sql
+!migrations/*.sql
 *.sqlite
 *.sqlite3
 *.db

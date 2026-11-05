@@ -5,6 +5,7 @@ import {
   updateSlotCapacity,
   toggleBlockedDate,
   updateCancellationPolicyText,
+  getAdminConfig,
 } from "@/lib/booking/store";
 import { isBookingsEnabled, disabledAdminResponse } from "@/lib/flags";
 
@@ -18,11 +19,8 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  return NextResponse.json({
-    capacityPerSlot: bookingConfig.capacityPerSlot,
-    blockedDates: bookingConfig.blockedDates,
-    cancellationPolicyText: bookingConfig.cancellationPolicyText,
-  });
+  const config = await getAdminConfig();
+  return NextResponse.json(config);
 }
 
 export async function POST(request: NextRequest) {
@@ -39,27 +37,24 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     if (typeof body.capacityPerSlot === "number") {
-      updateSlotCapacity(body.capacityPerSlot);
+      await updateSlotCapacity(body.capacityPerSlot);
     }
 
     if (body.toggleBlockedDate) {
       const { date, blocked } = body.toggleBlockedDate;
       if (date && typeof blocked === "boolean") {
-        toggleBlockedDate(date, blocked);
+        await toggleBlockedDate(date, blocked);
       }
     }
 
     if (typeof body.cancellationPolicyText === "string") {
-      updateCancellationPolicyText(body.cancellationPolicyText);
+      await updateCancellationPolicyText(body.cancellationPolicyText);
     }
 
+    const updatedConfig = await getAdminConfig();
     return NextResponse.json({
       success: true,
-      config: {
-        capacityPerSlot: bookingConfig.capacityPerSlot,
-        blockedDates: bookingConfig.blockedDates,
-        cancellationPolicyText: bookingConfig.cancellationPolicyText,
-      },
+      config: updatedConfig,
     });
   } catch (err: any) {
     return NextResponse.json(
