@@ -39,7 +39,7 @@ export const EmailPreviewClient: React.FC<EmailPreviewClientProps> = ({
   };
 
   return (
-    <main className="min-h-screen bg-stone-100 text-brown-950 py-8 px-4 sm:px-6">
+    <div className="min-h-screen bg-stone-100 text-brown-950 py-8 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto space-y-6">
         
         {/* Control Bar */}
@@ -205,6 +205,6 @@ export const EmailPreviewClient: React.FC<EmailPreviewClientProps> = ({
         </div>
 
       </div>
-    </main>
+    </div>
   );
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -11,16 +11,16 @@ import {
   Check,
   Compass,
 } from "lucide-react";
-import { Header } from "@/components/organisms/Header";
-import { Footer } from "@/components/organisms/Footer";
 import { Button } from "@/components/atoms/Button";
 import { Eyebrow } from "@/components/atoms/Eyebrow";
 import { SectionHeading } from "@/components/atoms/SectionHeading";
-import { ImageSlot } from "@/components/atoms/ImageSlot";
 import { GalleryGrid, GalleryItem } from "@/components/organisms/GalleryGrid";
-import { BookingDrawer } from "@/components/organisms/BookingDrawer";
+import { CardGrid } from "@/components/molecules/CardGrid";
+import { WorkshopCard } from "@/components/molecules/WorkshopCard";
 import { StickyBookBar } from "@/components/molecules/StickyBookBar";
 import { siteConfig } from "@/content/site";
+import { workshops } from "@/content/workshops";
+import { useBookingDrawer } from "@/context/BookingDrawerContext";
 import { formatRwf } from "@/lib/utils";
 
 // JSON-LD Structured Data for LocalBusiness
@@ -75,51 +75,47 @@ const galleryItems: GalleryItem[] = [
     title: "Imigongo Painting at the Easel",
     description: "Painting traditional geometric spiral relief overlooking the Kigali valley from Rebero hill.",
     src: "/images/imigongo-easel-kigali.jpg",
-    aspectRatio: "16/9",
+    aspectRatio: "4/3",
   },
   {
     id: "gal-2",
     title: "Traditional Dance & Royal Movement",
     description: "Mastering arm extensions and rhythmic footwork outdoors at Kigali Culture Village.",
     src: "/images/traditional-dance-outdoor.jpg",
-    aspectRatio: "3/4",
+    aspectRatio: "4/3",
   },
   {
     id: "gal-3",
     title: "Igisoro Mancala Board & Inyambutsi Seeds",
     description: "Hand-carved wooden 16-pit board set up for strategy and relay-sowing instruction.",
     src: "/images/igisoro-board-seeds.jpg",
-    aspectRatio: "1/1",
+    aspectRatio: "4/3",
   },
   {
     id: "gal-4",
     title: "Natural Pigment Detailing",
     description: "Precision line work using soot black, white kaolin, and local red ochre mineral colors.",
     src: "/images/imigongo-detail-painting.jpg",
-    aspectRatio: "1/1",
+    aspectRatio: "4/3",
   },
   {
     id: "gal-5",
-    title: "Sisal Weaving at Agaseke Center",
-    description: "Artisan extraction of agave leaves and coiling fine threads around sweet grass cores.",
-    aspectRatio: "16/9",
+    title: "Sisal Weaving on a Frame Loom",
+    description: "Hands threading natural sisal fiber and setting warp tension at the Agaseke Center.",
+    src: "/images/weaving/weaving-hands-loom.jpg",
+    aspectRatio: "4/3",
   },
   {
     id: "gal-6",
-    title: "Ingoma Drumming Cadences",
-    description: "Learning royal court drum rhythms under the guidance of traditional percussionists.",
-    aspectRatio: "16/9",
+    title: "Traditional Intore Warrior Movement",
+    description: "Artisan demonstrating historic royal court warrior movements wearing traditional umugara headdress and shield.",
+    src: "/images/dance/dance-intore-headdress.jpg",
+    aspectRatio: "4/3",
   },
 ];
 
 export default function HomePage() {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedWorkshop, setSelectedWorkshop] = useState<string | null>(null);
-
-  const openBooking = (slug?: string) => {
-    setSelectedWorkshop(slug || "imigongo-painting");
-    setDrawerOpen(true);
-  };
+  const { openBooking } = useBookingDrawer();
 
   const scrollToWorkshops = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -130,16 +126,14 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-brown-900 text-sand flex flex-col">
+    <>
       {/* Inject Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <Header onBookClick={() => openBooking()} />
-
-      <main className="flex-1">
+      <div className="space-y-0">
         {/* ========================================================
             1. HERO: Asymmetric Split Layout
            ======================================================== */}
@@ -244,184 +238,16 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Asymmetric Staggered Grid (Cards 2 & 4 offset vertically on desktop) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 items-start">
-              {/* Workshop 1: Imigongo Painting */}
-              <article className="rounded-card bg-brown-850 border border-amber-400/20 p-6 sm:p-8 flex flex-col justify-between space-y-6 shadow-warm-low hover:border-amber-400/50 transition-all">
-                <div className="space-y-4">
-                  <div className="relative aspect-[16/10] rounded-card overflow-hidden border border-amber-400/20 bg-brown-900">
-                    <Image
-                      src="/images/imigongo-detail-painting.jpg"
-                      alt="Artisan painting traditional Imigongo geometric relief"
-                      fill
-                      sizes="(max-width: 768px) 100vw, 550px"
-                      className="object-cover transition-transform duration-smooth hover:scale-105"
-                    />
-                  </div>
-
-                  <h3 className="font-serif text-2xl sm:text-3xl font-bold text-sand-bright">
-                    Imigongo Painting
-                  </h3>
-
-                  <p className="font-sans text-sm sm:text-base text-sand-primary leading-relaxed">
-                    Learn the sacred 18th-century geometric art form.
-                  </p>
-
-                  <div className="font-mono text-xs sm:text-sm text-sand-muted">
-                    25,000 RWF per person &middot; 2 hours
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-amber-400/15 flex items-center justify-between">
-                  <Link
-                    href="/workshops/imigongo-painting"
-                    className="font-display font-semibold text-xs sm:text-sm text-amber hover:text-amber-300 inline-flex items-center gap-1 uppercase tracking-button"
-                  >
-                    <span>View details</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-
-                  <Button
-                    onClick={() => openBooking("imigongo-painting")}
-                    size="sm"
-                  >
-                    Book
-                  </Button>
-                </div>
-              </article>
-
-              {/* Workshop 2: Traditional Dance (Staggered offset) */}
-              <article className="rounded-card bg-brown-850 border border-amber-400/20 p-6 sm:p-8 flex flex-col justify-between space-y-6 shadow-warm-low hover:border-amber-400/50 transition-all md:mt-12">
-                <div className="space-y-4">
-                  <div className="relative aspect-[16/10] rounded-card overflow-hidden border border-amber-400/20 bg-brown-900">
-                    <Image
-                      src="/images/traditional-dance-outdoor.jpg"
-                      alt="Traditional dance instructor guiding visitor movement"
-                      fill
-                      sizes="(max-width: 768px) 100vw, 550px"
-                      className="object-cover transition-transform duration-smooth hover:scale-105"
-                    />
-                  </div>
-
-                  <h3 className="font-serif text-2xl sm:text-3xl font-bold text-sand-bright">
-                    Traditional Dance
-                  </h3>
-
-                  <p className="font-sans text-sm sm:text-base text-sand-primary leading-relaxed">
-                    Experience energetic movements and royal history.
-                  </p>
-
-                  <div className="font-mono text-xs sm:text-sm text-sand-muted">
-                    25,000 RWF per person &middot; 2 hours
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-amber-400/15 flex items-center justify-between">
-                  <Link
-                    href="/workshops/traditional-dance"
-                    className="font-display font-semibold text-xs sm:text-sm text-amber hover:text-amber-300 inline-flex items-center gap-1 uppercase tracking-button"
-                  >
-                    <span>View details</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-
-                  <Button
-                    onClick={() => openBooking("traditional-dance")}
-                    size="sm"
-                  >
-                    Book
-                  </Button>
-                </div>
-              </article>
-
-              {/* Workshop 3: Carpet Hand-Weaving */}
-              <article className="rounded-card bg-brown-850 border border-amber-400/20 p-6 sm:p-8 flex flex-col justify-between space-y-6 shadow-warm-low hover:border-amber-400/50 transition-all">
-                <div className="space-y-4">
-                  <div className="relative aspect-[16/10] rounded-card overflow-hidden border border-amber-400/20 bg-brown-900">
-                    <Image
-                      src="/images/weaving/weaving-hands-loom.jpg"
-                      alt="Hands weaving natural sisal threads on a small frame loom"
-                      fill
-                      sizes="(max-width: 768px) 100vw, 550px"
-                      className="object-cover transition-transform duration-smooth hover:scale-105"
-                    />
-                  </div>
-
-                  <h3 className="font-serif text-2xl sm:text-3xl font-bold text-sand-bright">
-                    Carpet Hand-Weaving
-                  </h3>
-
-                  <p className="font-sans text-sm sm:text-base text-sand-primary leading-relaxed">
-                    Master the ancient craft of sisal weaving.
-                  </p>
-
-                  <div className="font-mono text-xs sm:text-sm text-sand-muted">
-                    25,000 RWF per person &middot; 2 hours
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-amber-400/15 flex items-center justify-between">
-                  <Link
-                    href="/workshops/hand-weaving"
-                    className="font-display font-semibold text-xs sm:text-sm text-amber hover:text-amber-300 inline-flex items-center gap-1 uppercase tracking-button"
-                  >
-                    <span>View details</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-
-                  <Button
-                    onClick={() => openBooking("hand-weaving")}
-                    size="sm"
-                  >
-                    Book
-                  </Button>
-                </div>
-              </article>
-
-              {/* Workshop 4: Igisoro Game (Staggered offset) */}
-              <article className="rounded-card bg-brown-850 border border-amber-400/20 p-6 sm:p-8 flex flex-col justify-between space-y-6 shadow-warm-low hover:border-amber-400/50 transition-all md:mt-12">
-                <div className="space-y-4">
-                  <div className="relative aspect-[16/10] rounded-card overflow-hidden border border-amber-400/20 bg-brown-900">
-                    <Image
-                      src="/images/igisoro-board-seeds.jpg"
-                      alt="Carved 16-pit Mancala wooden board with polished inyambutsi seeds"
-                      fill
-                      sizes="(max-width: 768px) 100vw, 550px"
-                      className="object-cover transition-transform duration-smooth hover:scale-105"
-                    />
-                  </div>
-
-                  <h3 className="font-serif text-2xl sm:text-3xl font-bold text-sand-bright">
-                    Igisoro Game
-                  </h3>
-
-                  <p className="font-sans text-sm sm:text-base text-sand-primary leading-relaxed">
-                    Challenge your mind with this historic tactical board game.
-                  </p>
-
-                  <div className="font-mono text-xs sm:text-sm text-sand-muted">
-                    25,000 RWF per person &middot; 2 hours
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-amber-400/15 flex items-center justify-between">
-                  <Link
-                    href="/workshops/igisoro-game"
-                    className="font-display font-semibold text-xs sm:text-sm text-amber hover:text-amber-300 inline-flex items-center gap-1 uppercase tracking-button"
-                  >
-                    <span>View details</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-
-                  <Button
-                    onClick={() => openBooking("igisoro-game")}
-                    size="sm"
-                  >
-                    Book
-                  </Button>
-                </div>
-              </article>
-            </div>
+            {/* Equal, Aligned Card Grid (2 Columns, Items Stretch, No Stagger) */}
+            <CardGrid columns={2}>
+              {workshops.map((workshop) => (
+                <WorkshopCard
+                  key={workshop.slug}
+                  workshop={workshop}
+                  onBook={(slug) => openBooking(slug)}
+                />
+              ))}
+            </CardGrid>
           </div>
         </section>
 
@@ -677,14 +503,7 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-      </main>
-
-      {/* Global Booking Drawer (pre-selects chosen workshop) */}
-      <BookingDrawer
-        isOpen={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        initialWorkshopSlug={selectedWorkshop}
-      />
+      </div>
 
       {/* Mobile Sticky Booking Bar */}
       <StickyBookBar
@@ -692,8 +511,6 @@ export default function HomePage() {
         priceRwf={25000}
         onBookClick={() => openBooking()}
       />
-
-      <Footer />
-    </div>
+    </>
   );
 }

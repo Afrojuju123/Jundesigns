@@ -37,7 +37,7 @@ const howItWorksSteps = [
 
 export const SchoolsPageClient: React.FC = () => {
   return (
-    <main className="bg-brown-900 text-sand-primary text-left min-h-screen">
+    <div className="text-left">
       {/* 1. HERO SECTION */}
       <SchoolsHero />
 
@@ -153,6 +153,6 @@ export const SchoolsPageClient: React.FC = () => {
       <div className="pt-8">
         <SchoolsFaq />
       </div>
-    </main>
+    </div>
   );
 };

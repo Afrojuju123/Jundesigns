@@ -27,7 +27,7 @@ export default async function BookingConfirmationPage({ params }: PageProps) {
 
   if (!booking) {
     return (
-      <main className="min-h-[70vh] flex items-center justify-center py-20 px-4 bg-white text-brown-950">
+      <div className="min-h-[70vh] flex items-center justify-center py-20 px-4 bg-white text-brown-950">
         <div className="max-w-md w-full text-center space-y-6">
           <div className="w-16 h-16 rounded-full bg-stone-100 border border-stone-200 flex items-center justify-center mx-auto text-amber text-2xl font-bold">
             ?
@@ -58,7 +58,7 @@ export default async function BookingConfirmationPage({ params }: PageProps) {
             </a>
           </div>
         </div>
-      </main>
+      </div>
     );
   }
 

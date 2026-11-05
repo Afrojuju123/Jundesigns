@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -12,15 +12,15 @@ import {
   Sparkles,
   Compass,
 } from "lucide-react";
-import { Header } from "@/components/organisms/Header";
-import { Footer } from "@/components/organisms/Footer";
 import { Button } from "@/components/atoms/Button";
 import { Eyebrow } from "@/components/atoms/Eyebrow";
 import { SectionHeading } from "@/components/atoms/SectionHeading";
 import { Callout } from "@/components/molecules/Callout";
 import { GalleryGrid } from "@/components/organisms/GalleryGrid";
-import { BookingDrawer } from "@/components/organisms/BookingDrawer";
+import { CardGrid } from "@/components/molecules/CardGrid";
+import { WorkshopCard } from "@/components/molecules/WorkshopCard";
 import { StickyBookBar } from "@/components/molecules/StickyBookBar";
+import { useBookingDrawer } from "@/context/BookingDrawerContext";
 import { Workshop } from "@/content/workshops";
 import { Testimonial } from "@/types";
 import { cn } from "@/lib/utils";
@@ -37,7 +37,7 @@ export const WorkshopView: React.FC<WorkshopViewProps> = ({
   testimonial,
   otherWorkshops,
 }) => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const { openBooking } = useBookingDrawer();
 
   // Event Structured Data (JSON-LD)
   const eventStructuredData = {
@@ -105,16 +105,14 @@ export const WorkshopView: React.FC<WorkshopViewProps> = ({
     : "aspect-[3/4]";
 
   return (
-    <div className="min-h-screen bg-brown-900 text-sand flex flex-col">
+    <div>
       {/* Event Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventStructuredData) }}
       />
 
-      <Header onBookClick={() => setDrawerOpen(true)} />
-
-      <main className="flex-1">
+      <div className="space-y-0">
         {/* ========================================================
             1. HERO: Workshop Hero with Overlapping Collage
            ======================================================== */}
@@ -139,7 +137,7 @@ export const WorkshopView: React.FC<WorkshopViewProps> = ({
 
               {/* Action Button */}
               <div className="pt-2">
-                <Button onClick={() => setDrawerOpen(true)} size="lg">
+                <Button onClick={() => openBooking(workshop.slug)} size="lg">
                   Book now
                 </Button>
               </div>
@@ -325,7 +323,7 @@ export const WorkshopView: React.FC<WorkshopViewProps> = ({
 
               <div className="lg:pl-6 lg:border-l lg:border-amber-400/15 shrink-0">
                 <Button
-                  onClick={() => setDrawerOpen(true)}
+                  onClick={() => openBooking(workshop.slug)}
                   size="default"
                   className="w-full sm:w-auto h-[48px]"
                 >
@@ -453,7 +451,7 @@ export const WorkshopView: React.FC<WorkshopViewProps> = ({
 
             <div className="shrink-0">
               <Button
-                onClick={() => setDrawerOpen(true)}
+                onClick={() => openBooking(workshop.slug)}
                 size="lg"
                 className="w-full sm:w-auto"
               >
@@ -525,52 +523,26 @@ export const WorkshopView: React.FC<WorkshopViewProps> = ({
               />
             </div>
 
-            {/* Compact 3-Column Row */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Equal 3-Column Card Grid */}
+            <CardGrid columns={3}>
               {otherWorkshops.map((other) => (
-                <Link
+                <WorkshopCard
                   key={other.slug}
-                  href={`/workshops/${other.slug}`}
-                  className="group rounded-card bg-brown-900 border border-amber-400/20 p-6 flex flex-col justify-between space-y-4 hover:border-amber-400/50 hover:shadow-warm-low transition-all"
-                >
-                  <div className="space-y-2">
-                    <span className="font-mono text-xs text-amber block">
-                      {other.duration} &middot; {formatRwf(other.priceRwf)}
-                    </span>
-                    <h3 className="font-serif text-xl sm:text-2xl font-bold text-sand-bright group-hover:text-amber transition-colors">
-                      {other.name}
-                    </h3>
-                    <p className="font-sans text-xs sm:text-sm text-sand-muted line-clamp-2">
-                      {other.cardLine}
-                    </p>
-                  </div>
-
-                  <div className="pt-3 border-t border-amber-400/15 flex items-center justify-between text-xs font-display font-semibold uppercase tracking-button text-amber">
-                    <span>View workshop</span>
-                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-                  </div>
-                </Link>
+                  workshop={other}
+                  onBook={(slug) => openBooking(slug)}
+                />
               ))}
-            </div>
+            </CardGrid>
           </div>
         </section>
-      </main>
-
-      {/* Booking Drawer pre-selected to this workshop */}
-      <BookingDrawer
-        isOpen={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        initialWorkshopSlug={workshop.slug}
-      />
+      </div>
 
       {/* Sticky Mobile Booking Bar */}
       <StickyBookBar
         workshopName={workshop.name}
         priceRwf={workshop.priceRwf}
-        onBookClick={() => setDrawerOpen(true)}
+        onBookClick={() => openBooking(workshop.slug)}
       />
-
-      <Footer />
     </div>
   );
 };

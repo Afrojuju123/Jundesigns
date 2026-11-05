@@ -113,7 +113,7 @@ const faqItems: AccordionItem[] = [
 
 export default function FAQPage() {
   return (
-    <main className="bg-brown-900 text-sand-primary text-left min-h-screen">
+    <div className="bg-brown-900 text-sand-primary text-left min-h-screen">
       {/* 1. HERO HEADER */}
       <section className="px-4 sm:px-6 lg:px-8 pt-16 pb-12 md:pt-20 md:pb-16 border-b border-amber-400/20 max-w-content mx-auto">
         <div className="max-w-3xl space-y-4">
@@ -168,6 +168,6 @@ export default function FAQPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

@@ -2,8 +2,6 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Header } from "@/components/organisms/Header";
-import { Footer } from "@/components/organisms/Footer";
 import { Button } from "@/components/atoms/Button";
 import { Eyebrow } from "@/components/atoms/Eyebrow";
 import { SectionHeading } from "@/components/atoms/SectionHeading";
@@ -39,11 +37,9 @@ export default function StyleGuidePage() {
   );
 
   return (
-    <div className="min-h-screen bg-brown-900 text-sand flex flex-col">
-      <Header onBookClick={() => setToastVisible(true)} />
-
+    <div>
       {/* Main Container */}
-      <main className="flex-1 max-w-content mx-auto w-full px-4 sm:px-6 lg:px-8 py-12 md:py-16 space-y-20 text-left">
+      <div className="max-w-content mx-auto w-full px-4 sm:px-6 lg:px-8 py-12 md:py-16 space-y-20 text-left">
         {/* Style Guide Header */}
         <section className="space-y-4 pb-8 border-b border-amber-400/20">
           <Eyebrow>— DESIGN SYSTEM LABORATORY</Eyebrow>
@@ -482,7 +478,7 @@ export default function StyleGuidePage() {
             </div>
           </div>
         </section>
-      </main>
+      </div>
 
       {/* Floating Toast Notification */}
       {toastVisible && (
@@ -502,8 +498,6 @@ export default function StyleGuidePage() {
         priceRwf={25000}
         onBookClick={() => setToastVisible(true)}
       />
-
-      <Footer />
     </div>
   );
 }

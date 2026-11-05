@@ -183,7 +183,7 @@ function QuoteStubContent() {
 
 export default function RequestQuotePage() {
   return (
-    <main className="bg-brown-900 text-sand-primary text-left min-h-screen px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <div className="bg-brown-900 text-sand-primary text-left min-h-screen px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       <Suspense
         fallback={
           <div className="max-w-2xl mx-auto text-center py-20 text-sand-muted">
@@ -193,6 +193,6 @@ export default function RequestQuotePage() {
       >
         <QuoteStubContent />
       </Suspense>
-    </main>
+    </div>
   );
 }

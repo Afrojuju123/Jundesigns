@@ -75,7 +75,7 @@ export const ConfirmationClientView: React.FC<ConfirmationClientViewProps> = ({
   const isRefunded = booking.status === "refunded";
 
   return (
-    <main className="min-h-screen bg-stone-50/70 text-brown-950 py-10 md:py-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-stone-50/70 text-brown-950 py-10 md:py-16 px-4 sm:px-6 lg:px-8">
       {/* Container: Max 760px for readable, print-friendly presentation */}
       <div className="max-w-3xl mx-auto space-y-8">
         
@@ -398,6 +398,6 @@ export const ConfirmationClientView: React.FC<ConfirmationClientViewProps> = ({
         </div>
 
       </div>
-    </main>
+    </div>
   );
 };

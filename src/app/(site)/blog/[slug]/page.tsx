@@ -38,7 +38,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   if (!post) {
     return (
-      <main className="min-h-[70vh] bg-brown-900 text-sand-primary flex items-center justify-center py-20 px-4 text-left">
+      <div className="min-h-[70vh] bg-brown-900 text-sand-primary flex items-center justify-center py-20 px-4 text-left">
         <div className="max-w-md w-full bg-brown-950 p-8 rounded-card border border-amber-400/25 space-y-4 shadow-warm-low text-center">
           <span className="font-display text-xs font-bold uppercase tracking-eyebrow text-amber block">
             — CULTURAL JOURNAL
@@ -59,12 +59,12 @@ export default async function BlogPostPage({ params }: PageProps) {
             </Link>
           </div>
         </div>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="bg-brown-900 text-sand-primary text-left min-h-screen py-16">
+    <div className="bg-brown-900 text-sand-primary text-left min-h-screen py-16">
       <article className="max-w-3xl mx-auto px-4 sm:px-6 space-y-8">
         <Link
           href="/blog"
@@ -116,6 +116,6 @@ export default async function BlogPostPage({ params }: PageProps) {
           ))}
         </div>
       </article>
-    </main>
+    </div>
   );
 }
