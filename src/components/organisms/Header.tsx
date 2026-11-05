@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/atoms/Button";
-import { navigationLinks } from "@/content/site";
+import { navigationLinks, STORE_LINKS_ENABLED } from "@/content/site";
 import { useBookingDrawer } from "@/context/BookingDrawerContext";
 import { cn } from "@/lib/utils";
 
@@ -17,9 +18,15 @@ export interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [workshopsDropdownOpen, setWorkshopsDropdownOpen] = useState(false);
+  const [mobileWorkshopsOpen, setMobileWorkshopsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const hamburgerButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Consume global booking drawer context
   let drawerContext: ReturnType<typeof useBookingDrawer> | null = null;
@@ -54,7 +61,14 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
     return pathname === href;
   };
 
-  // Mobile menu: Lock body scroll, handle Escape key, and trap focus
+  // Close mobile menu and sub-menus on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setWorkshopsDropdownOpen(false);
+    setMobileWorkshopsOpen(false);
+  }, [pathname]);
+
+  // Mobile menu: Lock body scroll, handle Escape key, focus restoration, and trap focus
   useEffect(() => {
     if (!mobileMenuOpen) return;
 
@@ -62,9 +76,22 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
+    // Focus the first focusable element inside drawer
+    const focusTimer = setTimeout(() => {
+      if (mobileMenuRef.current) {
+        const focusableElements = mobileMenuRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusableElements.length > 0) {
+          focusableElements[0].focus();
+        }
+      }
+    }, 50);
+
     // Handle Escape and Focus Trap
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        e.preventDefault();
         setMobileMenuOpen(false);
         hamburgerButtonRef.current?.focus();
         return;
@@ -95,16 +122,16 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => {
+      clearTimeout(focusTimer);
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [mobileMenuOpen]);
 
-  // Close mobile menu on route change
-  useEffect(() => {
+  const closeMobileMenuAndFocus = () => {
     setMobileMenuOpen(false);
-    setWorkshopsDropdownOpen(false);
-  }, [pathname]);
+    hamburgerButtonRef.current?.focus();
+  };
 
   return (
     <header
@@ -134,6 +161,24 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
           className="hidden md:flex items-center gap-7 lg:gap-8"
         >
           {navigationLinks.map((link) => {
+            const isStoreOrCustom =
+              link.name === "Store" || link.name === "Custom Orders";
+
+            // If store links are disabled, render as non-interactive disabled text
+            if (isStoreOrCustom && !STORE_LINKS_ENABLED) {
+              return (
+                <span
+                  key={link.name}
+                  aria-disabled="true"
+                  tabIndex={-1}
+                  className="inline-flex items-center gap-1 font-display text-xs lg:text-sm font-bold tracking-button uppercase py-2 text-stone-400 cursor-default select-none relative"
+                >
+                  <span>{link.name}</span>
+                  <span className="sr-only">(Coming soon)</span>
+                </span>
+              );
+            }
+
             const active = isLinkActive(link.href, !!link.children);
 
             if (link.children) {
@@ -271,7 +316,7 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-navigation-drawer"
-            className="w-11 h-11 rounded-sm bg-stone-100 border border-stone-200 flex items-center justify-center text-brown-950 hover:text-amber hover:border-amber transition-colors cursor-pointer"
+            className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-sm bg-stone-100 border border-stone-200 flex items-center justify-center text-brown-950 hover:text-amber hover:border-amber transition-colors cursor-pointer"
           >
             {mobileMenuOpen ? (
               <X className="w-5 h-5 stroke-[1.5]" />
@@ -282,119 +327,203 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
         </div>
       </div>
 
-      {/* Mobile Menu Full-Height Drawer */}
-      {mobileMenuOpen && (
-        <div
-          id="mobile-navigation-drawer"
-          ref={mobileMenuRef}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Mobile Navigation"
-          className="fixed inset-x-0 top-20 md:top-24 bottom-0 z-50 bg-white border-t border-stone-200 px-6 py-6 space-y-6 overflow-y-auto animate-reveal text-left shadow-2xl"
-        >
-          <div className="space-y-2">
-            <span className="font-display text-[11px] font-bold uppercase tracking-eyebrow text-amber block mb-2">
-              — Navigation
-            </span>
+      {/* Mobile Menu Full-Height Drawer Rendered Via Portal */}
+      {mounted &&
+        mobileMenuOpen &&
+        createPortal(
+          <div
+            id="mobile-navigation-drawer"
+            ref={mobileMenuRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile Navigation"
+            className="fixed inset-x-0 top-20 md:top-24 bottom-0 z-[45] bg-white border-t border-stone-200 px-6 py-6 overflow-y-auto text-left shadow-2xl flex flex-col justify-between motion-reduce:transition-none transition-all pb-[calc(2.5rem+env(safe-area-inset-bottom))]"
+          >
+            <div className="space-y-3">
+              <span className="font-display text-[11px] font-bold uppercase tracking-eyebrow text-amber block mb-2">
+                — Navigation
+              </span>
 
-            {/* Workshops Accordion in Mobile */}
-            <Link
-              href="/workshops"
-              aria-current={pathname === "/workshops" ? "page" : undefined}
-              onClick={() => setMobileMenuOpen(false)}
-              className={cn(
-                "block py-2 font-display text-base font-bold uppercase tracking-button",
-                pathname === "/workshops" ? "text-amber" : "text-brown-950 hover:text-amber"
-              )}
-            >
-              All Workshops
-            </Link>
-
-            <div className="pl-4 space-y-2.5 border-l-2 border-amber-400/40 my-2">
-              {[
-                { name: "Imigongo Painting", href: "/workshops/imigongo-painting" },
-                { name: "Traditional Dance", href: "/workshops/traditional-dance" },
-                { name: "Hand Weaving", href: "/workshops/hand-weaving" },
-                { name: "Igisoro Game", href: "/workshops/igisoro-game" },
-              ].map((sub) => {
-                const subActive = pathname === sub.href;
-                return (
-                  <Link
-                    key={sub.name}
-                    href={sub.href}
-                    aria-current={subActive ? "page" : undefined}
-                    onClick={() => setMobileMenuOpen(false)}
+              {/* Workshops Accordion in Mobile */}
+              <div>
+                <button
+                  type="button"
+                  onClick={() => setMobileWorkshopsOpen(!mobileWorkshopsOpen)}
+                  aria-expanded={mobileWorkshopsOpen}
+                  aria-controls="mobile-workshops-menu"
+                  className="w-full flex items-center justify-between py-2.5 font-display text-base font-bold uppercase tracking-button text-brown-950 hover:text-amber transition-colors text-left cursor-pointer"
+                >
+                  <span
                     className={cn(
-                      "block text-sm font-sans transition-colors",
-                      subActive ? "text-amber font-bold" : "text-brown-800 hover:text-amber"
+                      isLinkActive("/workshops") ? "text-amber" : ""
                     )}
                   >
-                    {sub.name}
-                  </Link>
-                );
-              })}
+                    Workshops
+                  </span>
+                  <ChevronDown
+                    className={cn(
+                      "w-4 h-4 stroke-[2] transition-transform duration-200 text-brown-600",
+                      mobileWorkshopsOpen ? "rotate-180 text-amber" : ""
+                    )}
+                  />
+                </button>
+
+                {mobileWorkshopsOpen && (
+                  <div
+                    id="mobile-workshops-menu"
+                    className="pl-4 space-y-2.5 border-l-2 border-amber-400/40 my-2 animate-reveal"
+                  >
+                    <Link
+                      href="/workshops"
+                      aria-current={pathname === "/workshops" ? "page" : undefined}
+                      onClick={closeMobileMenuAndFocus}
+                      className={cn(
+                        "block py-1 text-sm font-sans transition-colors font-semibold",
+                        pathname === "/workshops"
+                          ? "text-amber font-bold"
+                          : "text-brown-900 hover:text-amber"
+                      )}
+                    >
+                      All Workshops &rarr;
+                    </Link>
+                    {[
+                      {
+                        name: "Imigongo Painting",
+                        href: "/workshops/imigongo-painting",
+                      },
+                      {
+                        name: "Traditional Dance",
+                        href: "/workshops/traditional-dance",
+                      },
+                      {
+                        name: "Carpet Hand-Weaving",
+                        href: "/workshops/hand-weaving",
+                      },
+                      {
+                        name: "Igisoro Game",
+                        href: "/workshops/igisoro-game",
+                      },
+                    ].map((sub) => {
+                      const subActive = pathname === sub.href;
+                      return (
+                        <Link
+                          key={sub.name}
+                          href={sub.href}
+                          aria-current={subActive ? "page" : undefined}
+                          onClick={closeMobileMenuAndFocus}
+                          className={cn(
+                            "block py-1 text-sm font-sans transition-colors",
+                            subActive
+                              ? "text-amber font-bold"
+                              : "text-brown-800 hover:text-amber"
+                          )}
+                        >
+                          {sub.name}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Schools */}
+              <Link
+                href="/schools"
+                aria-current={
+                  pathname?.startsWith("/schools") ? "page" : undefined
+                }
+                onClick={closeMobileMenuAndFocus}
+                className={cn(
+                  "block py-2.5 font-display text-base font-bold uppercase tracking-button",
+                  pathname?.startsWith("/schools")
+                    ? "text-amber"
+                    : "text-brown-950 hover:text-amber"
+                )}
+              >
+                Schools &amp; Groups
+              </Link>
+
+              {/* Store */}
+              {!STORE_LINKS_ENABLED ? (
+                <span
+                  aria-disabled="true"
+                  tabIndex={-1}
+                  className="flex items-center justify-between py-2.5 font-display text-base font-bold uppercase tracking-button text-stone-400 cursor-default select-none"
+                >
+                  <span>Store</span>
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-stone-400/80">
+                    Coming soon
+                  </span>
+                </span>
+              ) : (
+                <Link
+                  href="https://jundesigns.rw/shop/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeMobileMenuAndFocus}
+                  className="flex items-center justify-between py-2.5 font-display text-base font-bold uppercase tracking-button text-brown-950 hover:text-amber"
+                >
+                  <span>Store</span>
+                  <ArrowUpRight className="w-4 h-4 text-brown-400" />
+                </Link>
+              )}
+
+              {/* Custom Orders */}
+              {!STORE_LINKS_ENABLED ? (
+                <span
+                  aria-disabled="true"
+                  tabIndex={-1}
+                  className="flex items-center justify-between py-2.5 font-display text-base font-bold uppercase tracking-button text-stone-400 cursor-default select-none"
+                >
+                  <span>Custom Orders</span>
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-stone-400/80">
+                    Coming soon
+                  </span>
+                </span>
+              ) : (
+                <Link
+                  href="https://jundesigns.rw/custom-work/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeMobileMenuAndFocus}
+                  className="flex items-center justify-between py-2.5 font-display text-base font-bold uppercase tracking-button text-brown-950 hover:text-amber"
+                >
+                  <span>Custom Orders</span>
+                  <ArrowUpRight className="w-4 h-4 text-brown-400" />
+                </Link>
+              )}
+
+              {/* Contact */}
+              <Link
+                href="/contact"
+                aria-current={pathname === "/contact" ? "page" : undefined}
+                onClick={closeMobileMenuAndFocus}
+                className={cn(
+                  "block py-2.5 font-display text-base font-bold uppercase tracking-button",
+                  pathname === "/contact"
+                    ? "text-amber"
+                    : "text-brown-950 hover:text-amber"
+                )}
+              >
+                Contact &amp; Location
+              </Link>
             </div>
 
-            <Link
-              href="/schools"
-              aria-current={pathname?.startsWith("/schools") ? "page" : undefined}
-              onClick={() => setMobileMenuOpen(false)}
-              className={cn(
-                "block py-2.5 font-display text-base font-bold uppercase tracking-button",
-                pathname?.startsWith("/schools") ? "text-amber" : "text-brown-950 hover:text-amber"
-              )}
-            >
-              Schools &amp; Groups
-            </Link>
-
-            <Link
-              href="https://jundesigns.rw/shop/"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-between py-2.5 font-display text-base font-bold uppercase tracking-button text-brown-950 hover:text-amber"
-            >
-              <span>Store</span>
-              <ArrowUpRight className="w-4 h-4 text-brown-400" />
-            </Link>
-
-            <Link
-              href="https://jundesigns.rw/custom-work/"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-between py-2.5 font-display text-base font-bold uppercase tracking-button text-brown-950 hover:text-amber"
-            >
-              <span>Custom Orders</span>
-              <ArrowUpRight className="w-4 h-4 text-brown-400" />
-            </Link>
-
-            <Link
-              href="/contact"
-              aria-current={pathname === "/contact" ? "page" : undefined}
-              onClick={() => setMobileMenuOpen(false)}
-              className={cn(
-                "block py-2.5 font-display text-base font-bold uppercase tracking-button",
-                pathname === "/contact" ? "text-amber" : "text-brown-950 hover:text-amber"
-              )}
-            >
-              Contact &amp; Location
-            </Link>
-          </div>
-
-          <div className="pt-6 border-t border-stone-200">
-            <Button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                handleBook();
-              }}
-              className="w-full h-[52px] text-xs"
-            >
-              Book a workshop
-            </Button>
-          </div>
-        </div>
-      )}
+            {/* Bottom Book Button */}
+            <div className="pt-6 border-t border-stone-200">
+              <Button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleBook();
+                }}
+                className="w-full h-[52px] text-xs"
+              >
+                Book a workshop
+              </Button>
+            </div>
+          </div>,
+          document.body
+        )}
     </header>
   );
 };
