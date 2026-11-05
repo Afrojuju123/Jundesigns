@@ -1,1 +1,2 @@
-npm run secretlint
+#!/bin/sh
+node node_modules/secretlint/bin/secretlint.js "**/*"
