@@ -64,29 +64,12 @@ export default function ReturnsExchangesPage() {
               Physical Handcrafted Goods &amp; Decor
             </h2>
 
-            {/* Legal Placeholder */}
-            <div className="space-y-3 p-6 rounded-card border border-dashed border-amber-400/35 bg-brown-900/60">
-              <div className="flex items-center gap-2 text-amber font-mono text-xs font-bold uppercase tracking-wider">
-                <span>[LEGAL TEXT NEEDED &mdash; PHYSICAL GOODS RETURN WINDOW]</span>
-              </div>
+            <div className="space-y-3 p-6 rounded-card border border-amber-400/25 bg-brown-900/60">
               <h3 className="font-serif text-lg font-semibold text-sand-bright">
-                Artisan Shop Return Window &amp; Condition of Goods
+                Artisan Showroom Purchases
               </h3>
-              <p className="font-sans text-xs sm:text-sm text-sand-muted leading-relaxed">
-                [LEGAL TEXT NEEDED: Specific policies governing physical items purchased in the Kigali showroom or online shop: return timeframe (e.g. 14 days), proof of purchase requirements, non-refundable custom-made bespoke furniture or tailored decor items, and international shipping return fees.]
-              </p>
-            </div>
-
-            {/* Damaged or Defective Handcrafted Goods */}
-            <div className="space-y-3 p-6 rounded-card border border-dashed border-amber-400/35 bg-brown-900/60">
-              <div className="flex items-center gap-2 text-amber font-mono text-xs font-bold uppercase tracking-wider">
-                <span>[LEGAL TEXT NEEDED &mdash; DAMAGED / TRANSIT CLAIMS]</span>
-              </div>
-              <h3 className="font-serif text-lg font-semibold text-sand-bright">
-                Transit Damage &amp; Defective Items
-              </h3>
-              <p className="font-sans text-xs sm:text-sm text-sand-muted leading-relaxed">
-                [LEGAL TEXT NEEDED: Process for reporting items damaged during air transit or courier transport, time window for photographic evidence, and replacement/repair procedures.]
+              <p className="font-sans text-xs sm:text-sm text-sand-primary leading-relaxed">
+                Policies governing physical items, custom bespoke furniture, and decorative crafts purchased at the Kigali Culture Village showroom or online store are established at the point of sale. For return inquiries, transit inspection, or repair support for handcrafted pieces, please contact our studio coordinators directly.
               </p>
             </div>
           </div>

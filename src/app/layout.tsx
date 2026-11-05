@@ -58,7 +58,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fontHeading.variable} ${fontBody.variable} ${fontAccent.variable}`}
+      className={`scroll-smooth scroll-pt-20 md:scroll-pt-24 ${fontHeading.variable} ${fontBody.variable} ${fontAccent.variable}`}
     >
       <body className="bg-brown-900 text-sand antialiased min-h-screen selection:bg-amber selection:text-brown-900">
         {children}

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { X, ZoomIn } from "lucide-react";
+import { X, ZoomIn, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface GalleryItem {
@@ -23,23 +23,63 @@ export const GalleryGrid: React.FC<GalleryGridProps> = ({
   className,
 }) => {
   const [activeItem, setActiveItem] = useState<GalleryItem | null>(null);
+  const lastActiveElementRef = useRef<HTMLElement | null>(null);
 
-  // Close lightbox on Escape key
+  const validItems = items.filter((item) => Boolean(item.src));
+  const currentIndex = validItems.findIndex((item) => item.id === activeItem?.id);
+
+  const openLightbox = (item: GalleryItem, e?: React.SyntheticEvent) => {
+    if (!item.src) return;
+    if (typeof document !== "undefined") {
+      lastActiveElementRef.current = document.activeElement as HTMLElement;
+    }
+    setActiveItem(item);
+  };
+
+  const closeLightbox = () => {
+    setActiveItem(null);
+    if (lastActiveElementRef.current) {
+      lastActiveElementRef.current.focus();
+    }
+  };
+
+  const showPrev = () => {
+    if (validItems.length <= 1) return;
+    const prevIdx = currentIndex > 0 ? currentIndex - 1 : validItems.length - 1;
+    setActiveItem(validItems[prevIdx]);
+  };
+
+  const showNext = () => {
+    if (validItems.length <= 1) return;
+    const nextIdx = currentIndex < validItems.length - 1 ? currentIndex + 1 : 0;
+    setActiveItem(validItems[nextIdx]);
+  };
+
+  // Keyboard navigation: Escape, ArrowLeft, ArrowRight
   useEffect(() => {
+    if (!activeItem) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setActiveItem(null);
+        e.preventDefault();
+        closeLightbox();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        showPrev();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        showNext();
       }
     };
-    if (activeItem) {
-      window.addEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "hidden";
-    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    document.body.style.overflow = "hidden";
+
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "auto";
     };
-  }, [activeItem]);
+  }, [activeItem, currentIndex]);
 
   return (
     <>
@@ -53,14 +93,14 @@ export const GalleryGrid: React.FC<GalleryGridProps> = ({
         {items.map((item, idx) => (
           <article
             key={item.id}
-            onClick={() => item.src && setActiveItem(item)}
-            className="group relative cursor-pointer overflow-hidden rounded-card border border-amber-400/20 bg-brown-850 p-5 sm:p-6 flex flex-col h-full transition-all duration-quick hover:border-amber-400/50 hover:shadow-warm-low select-none"
+            onClick={(e) => openLightbox(item, e)}
+            className="group relative cursor-pointer overflow-hidden rounded-card border border-amber-400/20 bg-brown-850 p-5 sm:p-6 flex flex-col h-full transition-all duration-quick hover:border-amber-400/50 hover:shadow-warm-low select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber"
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
-                if (item.src) setActiveItem(item);
+                openLightbox(item, e);
               }
             }}
             aria-label={`View photo: ${item.title}`}
@@ -77,9 +117,7 @@ export const GalleryGrid: React.FC<GalleryGridProps> = ({
                   className="object-cover transition-transform duration-smooth group-hover:scale-105"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-brown-900 text-sand-muted text-xs">
-                  {process.env.NODE_ENV === "development" ? "PHOTO SLOT" : ""}
-                </div>
+                <div className="w-full h-full flex items-center justify-center bg-brown-900 text-sand-muted text-xs" />
               )}
             </div>
 
@@ -111,19 +149,41 @@ export const GalleryGrid: React.FC<GalleryGridProps> = ({
           role="dialog"
           aria-modal="true"
           aria-label={`Expanded view: ${activeItem.title}`}
-          onClick={() => setActiveItem(null)}
+          onClick={closeLightbox}
         >
           <div
             className="relative max-w-4xl w-full bg-brown-900 border border-amber-400/30 rounded-hero overflow-hidden shadow-drawer text-left"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Top Close Button */}
             <button
-              onClick={() => setActiveItem(null)}
-              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-brown-950/80 text-sand-primary hover:text-amber border border-amber-400/30 transition-colors cursor-pointer"
+              onClick={closeLightbox}
+              className="absolute top-4 right-4 z-20 p-2 rounded-full bg-brown-950/80 text-sand-primary hover:text-amber border border-amber-400/30 transition-colors cursor-pointer"
               aria-label="Close dialog"
             >
               <X className="w-5 h-5" />
             </button>
+
+            {/* Next / Previous Controls */}
+            {validItems.length > 1 && (
+              <>
+                <button
+                  onClick={showPrev}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-brown-950/80 hover:bg-amber hover:text-brown-950 text-sand-bright border border-amber-400/30 transition-colors cursor-pointer"
+                  aria-label="Previous photo"
+                >
+                  <ChevronLeft className="w-5 h-5 stroke-[2]" />
+                </button>
+
+                <button
+                  onClick={showNext}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-brown-950/80 hover:bg-amber hover:text-brown-950 text-sand-bright border border-amber-400/30 transition-colors cursor-pointer"
+                  aria-label="Next photo"
+                >
+                  <ChevronRight className="w-5 h-5 stroke-[2]" />
+                </button>
+              </>
+            )}
 
             <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full bg-brown-950">
               <Image
@@ -137,9 +197,16 @@ export const GalleryGrid: React.FC<GalleryGridProps> = ({
             </div>
 
             <div className="p-6 sm:p-8 space-y-2 bg-brown-900 border-t border-amber-400/20">
-              <span className="font-display text-xs font-bold uppercase tracking-eyebrow text-amber block">
-                Jun Designs Artisan Documentary
-              </span>
+              <div className="flex items-center justify-between">
+                <span className="font-display text-xs font-bold uppercase tracking-eyebrow text-amber block">
+                  Jun Designs Artisan Documentary
+                </span>
+                {validItems.length > 1 && (
+                  <span className="font-mono text-xs text-sand-muted">
+                    {currentIndex + 1} / {validItems.length}
+                  </span>
+                )}
+              </div>
               <h3 className="font-serif text-2xl font-bold text-sand-bright">
                 {activeItem.title}
               </h3>

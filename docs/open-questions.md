@@ -85,3 +85,17 @@ The following short descriptions from the Jun Designs artisans/owner are needed:
    - One or two plain sentences explaining the sisal fiber preparation and hand-weaving demonstration.
 8. **Live guhiha:**
    - One or two plain sentences explaining this traditional Rwandan craft practice.
+
+---
+
+## 5. Physical Artisan Store & Goods Policies `[LEGAL TEXT NEEDED]`
+
+Before activating the online store and physical goods purchases:
+1. **Physical Goods Return Window:**
+   - Return timeframe (e.g. 14 or 30 days from delivery/pickup).
+   - Proof of purchase requirements.
+   - Non-refundable exclusions (custom-made bespoke furniture or tailored decor items).
+   - International shipping return costs policy.
+2. **Transit Damage & Defective Items:**
+   - Reporting window for goods damaged during transit or courier delivery (e.g. within 48 hours with photographic evidence).
+   - Repair vs replacement vs refund protocol for one-of-a-kind handcrafted pieces.
