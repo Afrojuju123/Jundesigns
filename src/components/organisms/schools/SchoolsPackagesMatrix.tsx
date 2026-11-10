@@ -2,13 +2,18 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Check, Minus, ArrowRight, ChevronDown } from "lucide-react";
+import { Check, Minus, ArrowRight, ChevronDown, Clock, MapPin, Users, Sparkles, Info } from "lucide-react";
 import { Eyebrow } from "@/components/atoms/Eyebrow";
 import { SectionHeading } from "@/components/atoms/SectionHeading";
 import {
   SCHOOL_PACKAGES,
   SCHOOL_ACTIVITIES,
   SchoolPackage,
+  DURATION_NOTE,
+  TEACHER_ALLOWANCE_TIERS,
+  TEACHER_POLICY_NOTE,
+  LOCATION_NOTE,
+  CUSTOM_GROUP_NOTE,
 } from "@/data/schools";
 import { formatRwf } from "@/lib/utils";
 
@@ -50,7 +55,11 @@ export const SchoolsPackagesMatrix: React.FC = () => {
                     <span className="text-xs font-mono text-sand-muted block mt-1">
                       Min {pkg.minStudents} students
                     </span>
-                    <span className="inline-block mt-2 px-2.5 py-0.5 rounded-pill text-[10px] font-mono font-semibold bg-amber/15 text-amber border border-amber/30">
+                    <span className="inline-flex items-center gap-1 mt-1 text-xs font-sans text-amber font-medium">
+                      <Clock className="w-3 h-3 text-amber shrink-0" />
+                      <span>{pkg.duration}</span>
+                    </span>
+                    <span className="inline-block mt-1 px-2.5 py-0.5 rounded-pill text-[10px] font-mono font-semibold bg-amber/15 text-amber border border-amber/30">
                       {pkg.activities.length} activities
                     </span>
                   </th>
@@ -174,7 +183,7 @@ export const SchoolsPackagesMatrix: React.FC = () => {
                       </span>
                     </div>
                     <p className="text-xs font-mono text-sand-muted">
-                      Minimum {pkg.minStudents} students &bull; From {formatRwf(pkg.tiers[pkg.tiers.length - 1].pricePerStudent)}/student
+                      Minimum {pkg.minStudents} students &bull; {pkg.duration} &bull; From {formatRwf(pkg.tiers[pkg.tiers.length - 1].pricePerStudent)}/student
                     </p>
                   </div>
                   <ChevronDown
@@ -247,6 +256,79 @@ export const SchoolsPackagesMatrix: React.FC = () => {
               </div>
             );
           })}
+        </div>
+
+        {/* Duration Note */}
+        <div className="flex items-center gap-3 p-4 rounded-card bg-brown-900/60 border border-amber-400/20 text-xs sm:text-sm text-sand-primary">
+          <Clock className="w-4 h-4 text-amber shrink-0" />
+          <span>
+            <strong className="text-sand-bright">Package Duration:</strong> Bronze is 2 to 3 hours; Silver and Gold are 4 to 5 hours. <span className="text-amber font-medium">{DURATION_NOTE}</span>
+          </span>
+        </div>
+
+        {/* Teacher Allowances & Workshop Policies (Informational UI) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-amber-400/20">
+          {/* 1. Teacher Allowance Policy */}
+          <div className="rounded-card bg-brown-950 border border-amber-400/25 p-6 space-y-3">
+            <div className="flex items-center gap-2 text-amber font-display text-xs font-bold uppercase tracking-eyebrow">
+              <Users className="w-4 h-4" />
+              <span>Teacher Allowances</span>
+            </div>
+            <h4 className="font-serif text-lg font-bold text-sand-bright">
+              Complimentary Staff Entry
+            </h4>
+            <ul className="space-y-2 text-xs font-sans text-sand-primary">
+              {TEACHER_ALLOWANCE_TIERS.map((tier) => (
+                <li key={tier.label} className="flex justify-between items-center py-1 border-b border-amber-400/10">
+                  <span className="font-mono text-sand-muted">{tier.label}:</span>
+                  <span className="font-semibold text-amber">{tier.freeTeachers}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-[11px] text-sand-muted italic leading-relaxed pt-1">
+              &ldquo;{TEACHER_POLICY_NOTE}&rdquo;
+            </p>
+          </div>
+
+          {/* 2. Workshop Location & Off-Site Hosting */}
+          <div className="rounded-card bg-brown-950 border border-amber-400/25 p-6 space-y-3">
+            <div className="flex items-center gap-2 text-amber font-display text-xs font-bold uppercase tracking-eyebrow">
+              <MapPin className="w-4 h-4" />
+              <span>Workshop Location</span>
+            </div>
+            <h4 className="font-serif text-lg font-bold text-sand-bright">
+              Studio or On-Campus
+            </h4>
+            <p className="text-xs font-sans text-sand-primary leading-relaxed">
+              {LOCATION_NOTE}
+            </p>
+            <p className="text-[11px] text-sand-muted pt-1">
+              Our master artisans bring all authentic tools, easels, pigments, and materials directly to your campus hall or courtyard.
+            </p>
+          </div>
+
+          {/* 3. Custom & Tailored Groups */}
+          <div className="rounded-card bg-brown-950 border border-amber-400/25 p-6 space-y-3">
+            <div className="flex items-center gap-2 text-amber font-display text-xs font-bold uppercase tracking-eyebrow">
+              <Sparkles className="w-4 h-4" />
+              <span>Custom Group Sizes</span>
+            </div>
+            <h4 className="font-serif text-lg font-bold text-sand-bright">
+              Tailored Cultural Formats
+            </h4>
+            <p className="text-xs font-sans text-sand-primary leading-relaxed">
+              {CUSTOM_GROUP_NOTE}
+            </p>
+            <div className="pt-2">
+              <Link
+                href="/schools/request-quote?custom=true"
+                className="inline-flex items-center gap-1.5 text-xs font-display uppercase tracking-button text-amber hover:text-amber-300 transition-colors font-bold"
+              >
+                <span>Request Custom Format</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>

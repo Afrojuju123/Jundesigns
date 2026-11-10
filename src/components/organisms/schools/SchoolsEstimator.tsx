@@ -2,13 +2,18 @@
 
 import React, { useState, useId } from "react";
 import Link from "next/link";
-import { Users, Calculator, ArrowRight, CheckCircle2, HelpCircle, Phone } from "lucide-react";
+import { Users, Calculator, ArrowRight, CheckCircle2, HelpCircle, Phone, Clock, MapPin, Sparkles } from "lucide-react";
 import {
   SCHOOL_PACKAGES,
   SchoolPackageId,
   getPackagesForGroupSize,
   estimateTotal,
   SCHOOLS_CONTACT_PHONE,
+  DURATION_NOTE,
+  TEACHER_POLICY_NOTE,
+  LOCATION_NOTE,
+  CUSTOM_GROUP_NOTE,
+  getTeacherAllowance,
 } from "@/data/schools";
 import { formatRwf } from "@/lib/utils";
 
@@ -70,9 +75,16 @@ export const SchoolsEstimator: React.FC = () => {
               className="w-full h-14 pl-12 pr-4 bg-brown-900 border border-amber-400/30 rounded-card font-mono text-lg font-bold text-sand-bright placeholder-sand-muted/50 focus:outline-none focus:ring-2 focus:ring-amber focus:border-amber transition-all"
             />
           </div>
-          <span className="block text-[11px] text-sand-muted">
-            Packages start from 25 students. Teachers and chaperones attend free.
-          </span>
+          <div className="space-y-1 text-[11px] text-sand-muted">
+            {studentCount >= 25 ? (
+              <span className="text-amber font-medium block">
+                Teacher entry: {getTeacherAllowance(studentCount)}.{" "}
+                <span className="text-sand-muted italic font-normal">({TEACHER_POLICY_NOTE})</span>
+              </span>
+            ) : (
+              <span>Packages start from 25 students. Groups under 25 are welcome to reach out to book a tailored experience.</span>
+            )}
+          </div>
         </div>
 
         {/* Quick Stepper Presets */}
@@ -170,8 +182,9 @@ export const SchoolsEstimator: React.FC = () => {
                           <span className="w-2.5 h-2.5 rounded-full bg-amber" />
                         )}
                       </div>
-                      <div className="text-xs font-sans text-sand-muted">
-                        {pkg.activities.length} activities
+                      <div className="flex items-center justify-between text-xs font-sans text-sand-muted">
+                        <span>{pkg.activities.length} activities</span>
+                        <span className="text-amber font-mono text-[11px]">{pkg.duration}</span>
                       </div>
                       <div className="mt-2 text-sm font-mono font-bold text-amber">
                         {isEligible && pkgEstimate ? (
@@ -199,9 +212,25 @@ export const SchoolsEstimator: React.FC = () => {
                   <h4 className="font-serif text-xl sm:text-2xl font-bold text-sand-bright">
                     {activePackage.name} Package for {studentCount} Students
                   </h4>
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-sand-muted">
+                    <span className="inline-flex items-center gap-1 text-amber font-mono font-medium">
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>Duration: {activePackage.duration}</span>
+                    </span>
+                    <span>&bull;</span>
+                    <span className="italic">{DURATION_NOTE}</span>
+                  </div>
                   <p className="font-sans text-xs sm:text-sm text-sand-primary leading-relaxed">
-                    Includes {activePackage.activities.length} guided cultural activities, artisan instructors, all workshop materials, take-home crafts for students, and free supervisor admission.
+                    Includes {activePackage.activities.length} guided cultural activities, artisan instructors, all workshop materials, and student take-home creations.
                   </p>
+                  <div className="p-3 rounded-sm bg-brown-950/70 border border-amber-400/15 space-y-1 text-xs">
+                    <div className="text-sand-bright font-medium">
+                      Teacher Entry: <span className="text-amber font-semibold">{getTeacherAllowance(studentCount)}</span>
+                    </div>
+                    <div className="text-[11px] text-sand-muted italic">
+                      {TEACHER_POLICY_NOTE}
+                    </div>
+                  </div>
                   <div className="font-mono text-xs text-sand-muted">
                     Calculation: {studentCount} students &times; {formatRwf(estimate.perStudent)} = {formatRwf(estimate.total)}
                   </div>

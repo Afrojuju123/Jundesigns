@@ -21,6 +21,11 @@ import {
   SCHOOL_PACKAGES,
   estimateTotal,
   SCHOOLS_CONTACT_PHONE,
+  DURATION_NOTE,
+  TEACHER_POLICY_NOTE,
+  LOCATION_NOTE,
+  CUSTOM_GROUP_NOTE,
+  getTeacherAllowance,
 } from "@/data/schools";
 import { siteConfig } from "@/content/site";
 import { formatRwf } from "@/lib/utils";
@@ -363,9 +368,9 @@ function QuoteFormContent() {
                 onChange={(e) => setSelectedPackage(e.target.value)}
                 className="w-full h-11 px-3.5 rounded-sm bg-brown-900 border border-amber-400/30 text-sand-bright text-sm focus:border-amber focus:ring-1 focus:ring-amber focus:outline-none transition-colors"
               >
-                <option value="bronze">Bronze Package (5 Activities, from 4,500 RWF)</option>
-                <option value="silver">Silver Package (6 Activities, from 6,000 RWF)</option>
-                <option value="gold">Gold Package (8 Activities, from 7,000 RWF)</option>
+                <option value="bronze">Bronze Package (4 Activities, 2–3 hrs, from 4,500 RWF)</option>
+                <option value="silver">Silver Package (6 Activities, 4–5 hrs, from 6,000 RWF)</option>
+                <option value="gold">Gold Package (7 Activities, 4–5 hrs, from 7,000 RWF)</option>
                 <option value="university">University / Higher Education (Custom)</option>
               </select>
             </div>
@@ -428,7 +433,14 @@ function QuoteFormContent() {
 
           <div className="pt-4 border-t border-amber-400/15 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-sand-muted">
-              Teachers attend free. Formal quotation sent within 24 business hours.
+              {studentsCount >= 25 ? (
+                <span>
+                  Staff allowance: <strong className="text-sand-bright">{getTeacherAllowance(studentsCount)}</strong>.
+                </span>
+              ) : (
+                <span>Groups under 25 are welcome to request a tailored experience.</span>
+              )}{" "}
+              Formal quotation sent within 24 business hours.
             </p>
 
             <Button
@@ -448,6 +460,33 @@ function QuoteFormContent() {
           </div>
         </form>
       )}
+
+      {/* Workshop Guidelines & Policies Callout */}
+      <div className="rounded-card bg-brown-900/60 border border-amber-400/20 p-5 space-y-3 text-xs text-sand-primary text-left">
+        <h3 className="font-display text-xs font-bold uppercase tracking-eyebrow text-amber">
+          — School Group Policies &amp; Details
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="space-y-1">
+            <span className="font-semibold text-sand-bright block">Teacher Entry:</span>
+            <p className="text-sand-muted leading-relaxed">
+              25–80 students: up to 5 free teachers (additional teachers pay). 81–150 students: up to 8 free teachers. 151+ students: up to 9–12 free teachers. <span className="italic">&ldquo;{TEACHER_POLICY_NOTE}&rdquo;</span>
+            </p>
+          </div>
+          <div className="space-y-1">
+            <span className="font-semibold text-sand-bright block">Location &amp; Off-Site:</span>
+            <p className="text-sand-muted leading-relaxed">
+              {LOCATION_NOTE}
+            </p>
+          </div>
+          <div className="space-y-1">
+            <span className="font-semibold text-sand-bright block">Custom Groups:</span>
+            <p className="text-sand-muted leading-relaxed">
+              {CUSTOM_GROUP_NOTE}
+            </p>
+          </div>
+        </div>
+      </div>
 
       {/* Direct Contact Actions */}
       <div className="rounded-hero bg-brown-950 border border-amber-400/30 p-6 sm:p-8 space-y-6 shadow-warm-low">
