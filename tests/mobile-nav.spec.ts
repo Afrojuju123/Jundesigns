@@ -1,7 +1,8 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Mobile Navigation Drawer & Accordion", () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, isMobile }) => {
+    test.skip(!isMobile, "Mobile navigation tests are only applicable to mobile viewports");
     // Navigate to homepage
     await page.goto("/");
   });

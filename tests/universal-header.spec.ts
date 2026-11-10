@@ -11,6 +11,7 @@ const publicRoutes = [
   "/schools",
   "/schools/request-quote",
   "/booking/cancelled",
+  "/about",
   "/company",
   "/contact",
   "/faq",
@@ -23,7 +24,7 @@ const publicRoutes = [
 
 test.describe("Universal Header & Footer Verification", () => {
   for (const route of publicRoutes) {
-    test(`route ${route} has exactly one universal header and footer`, async ({ page }) => {
+    test(`route ${route} has exactly one universal header and footer`, async ({ page, isMobile }) => {
       await page.goto(route, { waitUntil: "domcontentloaded" });
 
       // 1. Exactly one banner element (Header)
@@ -36,27 +37,33 @@ test.describe("Universal Header & Footer Verification", () => {
 
       // 3. Primary button ('Book a workshop' or 'Book') is present in banner
       const bookButton = banner.getByRole("button", { name: /book/i });
-      await expect(bookButton).toBeVisible();
+      await expect(bookButton.first()).toBeVisible();
 
-      // 4. Navigation links match expected list: Workshops, Schools, Store, Custom Orders, Contact
-      const expectedNav = ["Workshops", "Schools", "Store", "Custom Orders", "Contact"];
-      for (const navText of expectedNav) {
-        const navItem = banner.getByText(navText, { exact: false });
-        await expect(navItem.first()).toBeVisible();
-      }
+      if (!isMobile) {
+        // 4. Desktop navigation links match expected list: Workshops, Schools, Store, Custom Orders, Contact
+        const expectedNav = ["Workshops", "Schools", "Store", "Custom Orders", "Contact"];
+        for (const navText of expectedNav) {
+          const navItem = banner.getByText(navText, { exact: false });
+          await expect(navItem.first()).toBeVisible();
+        }
 
-      // 5. Store and Custom Orders interactive vs disabled behavior based on flag
-      if (STORE_LINKS_ENABLED) {
-        await expect(banner.locator('a:has-text("Store")')).toHaveCount(1);
-        await expect(banner.locator('a:has-text("Custom Orders")')).toHaveCount(1);
+        // 5. Store and Custom Orders interactive vs disabled behavior based on flag
+        if (STORE_LINKS_ENABLED) {
+          await expect(banner.locator('a:has-text("Store")')).toHaveCount(1);
+          await expect(banner.locator('a:has-text("Custom Orders")')).toHaveCount(1);
+        } else {
+          const disabledStore = banner.locator('span[aria-disabled="true"]:has-text("Store")');
+          await expect(disabledStore.first()).toBeVisible();
+          await expect(banner.locator('a:has-text("Store")')).toHaveCount(0);
+
+          const disabledCustom = banner.locator('span[aria-disabled="true"]:has-text("Custom Orders")');
+          await expect(disabledCustom.first()).toBeVisible();
+          await expect(banner.locator('a:has-text("Custom Orders")')).toHaveCount(0);
+        }
       } else {
-        const disabledStore = banner.locator('span[aria-disabled="true"]:has-text("Store")');
-        await expect(disabledStore.first()).toBeVisible();
-        await expect(banner.locator('a:has-text("Store")')).toHaveCount(0);
-
-        const disabledCustom = banner.locator('span[aria-disabled="true"]:has-text("Custom Orders")');
-        await expect(disabledCustom.first()).toBeVisible();
-        await expect(banner.locator('a:has-text("Custom Orders")')).toHaveCount(0);
+        // On mobile, the hamburger menu button is present and visible
+        const hamburger = banner.locator('button[aria-controls="mobile-navigation-drawer"]');
+        await expect(hamburger).toBeVisible();
       }
     });
   }

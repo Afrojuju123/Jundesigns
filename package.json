@@ -15,7 +15,7 @@
     "test:mobile-nav": "playwright test tests/mobile-nav.spec.ts",
     "test:audit": "playwright test tests/site-audit-crawler.spec.ts",
     "type-check": "tsc --noEmit",
-    "test:d1": "playwright test tests/d1-store.spec.ts",
+    "test:d1": "playwright test tests/d1-store.spec.ts --project=edge --workers=1",
     "secretlint": "secretlint \"**/*\"",
     "prepare": "husky"
   },

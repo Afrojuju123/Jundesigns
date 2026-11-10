@@ -9,6 +9,7 @@ const routesToCrawl = [
   "/workshops/igisoro-game",
   "/schools",
   "/schools/request-quote",
+  "/about",
   "/company",
   "/contact",
   "/faq",
