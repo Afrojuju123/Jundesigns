@@ -28,7 +28,9 @@ export interface SiteConfig {
   socials: {
     facebook: string;
     instagram: string;
-    pinterest: string;
+    tiktok: string;
+    googleBusiness: string;
+    pinterest?: string;
   };
   externalLinks: {
     shop: string;

@@ -17,8 +17,10 @@ export const siteConfig: SiteConfig = {
   whatsappUrl: "https://wa.me/250780324944?text=Hello%20Jun%20Designs%2C%20I%20would%20like%20to%20inquire%20about%20a%20cultural%20workshop",
   email: "info@jundesigns.rw",
   socials: {
-    facebook: "https://facebook.com/jundesignsrw",
-    instagram: "https://instagram.com/jun_designs_rw",
+    facebook: "https://www.facebook.com/share/1JMxGSrY32/?mibextid=wwXIfr",
+    instagram: "https://www.instagram.com/jun_designs_?rpxt=dzBvZ3FvcTE2enI3&utm_source=qr",
+    tiktok: "https://www.tiktok.com/@jun.designs?_r=1&_t=ZS-9BGBLrxptX2",
+    googleBusiness: "https://maps.google.com/?q=Jun+Designs+Kigali+Culture+Village+Rebero+Rwanda",
     pinterest: "https://pinterest.com/jundesignsrw",
   },
   externalLinks: {
