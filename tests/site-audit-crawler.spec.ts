@@ -16,6 +16,8 @@ const routesToCrawl = [
   "/terms-conditions",
   "/returns-exchanges",
   "/blog",
+  "/blog/rwandan-barkcloth-heritage-written-in-nature",
+  "/blog/imigongo-the-art-of-rwandan-heritage",
   "/style-guide",
   "/booking/cancelled",
 ];

@@ -49,7 +49,7 @@ export default function AboutPage() {
           {/* Text Content (7 cols) */}
           <div className="lg:col-span-7 space-y-6">
             <div className="space-y-2">
-              <Eyebrow>SECTION 1: OUR STORY</Eyebrow>
+              <Eyebrow>OUR STORY</Eyebrow>
               <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-sand-bright leading-tight">
                 Jun Designs &mdash; Celebrating Heritage Through Art, Creativity and Culture
               </h2>
@@ -173,7 +173,7 @@ export default function AboutPage() {
             {/* Founder Narrative (7 cols) */}
             <div className="lg:col-span-7 space-y-6">
               <div className="space-y-2">
-                <Eyebrow>SECTION 2: FOUNDER &amp; MANAGING DIRECTOR</Eyebrow>
+                <Eyebrow>FOUNDER &amp; MANAGING DIRECTOR</Eyebrow>
                 <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-sand-bright leading-tight">
                   THE STORY OF MUSEMAKWERI FRED JUNIOR
                 </h2>
