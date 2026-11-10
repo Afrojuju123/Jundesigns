@@ -47,6 +47,11 @@ export const navigationLinks = [
     isExternal: false,
   },
   {
+    name: "Journal",
+    href: "/blog",
+    isExternal: false,
+  },
+  {
     name: "Store",
     href: "https://jundesigns.rw/shop/",
     isExternal: true,

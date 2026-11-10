@@ -20,6 +20,7 @@ import { WorkshopCard } from "@/components/molecules/WorkshopCard";
 import { StickyBookBar } from "@/components/molecules/StickyBookBar";
 import { siteConfig, STORE_LINKS_ENABLED } from "@/content/site";
 import { workshops } from "@/content/workshops";
+import { blogPosts } from "@/content/blog";
 import { useBookingDrawer } from "@/context/BookingDrawerContext";
 import { formatRwf } from "@/lib/utils";
 
@@ -451,7 +452,94 @@ export default function HomePage() {
         </section>
 
         {/* ========================================================
-            6. PLAN YOUR VISIT: Location, Schedule & Final CTA
+            6. CULTURAL JOURNAL: Field Notes & Craft Histories
+           ======================================================== */}
+        <section className="px-4 sm:px-6 lg:px-8 py-20 bg-brown-950 border-t border-amber-400/20 text-left">
+          <div className="max-w-content mx-auto space-y-12">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div className="space-y-2 max-w-xl">
+                <Eyebrow>CULTURAL JOURNAL &amp; STORIES</Eyebrow>
+                <SectionHeading
+                  level="h2"
+                  title="Stories of *Living Heritage*"
+                />
+                <p className="font-sans text-sm md:text-base text-sand-primary pt-1">
+                  Discover the history of Rwandan barkcloth, 18th-century Imigongo geometric relief, and ancestral craft wisdom from Rebero hill.
+                </p>
+              </div>
+
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-1.5 text-xs font-display font-bold uppercase tracking-button text-amber hover:text-amber-300 transition-colors shrink-0"
+              >
+                <span>Read All Journal Stories</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {blogPosts.slice(0, 2).map((post) => (
+                <article
+                  key={post.slug}
+                  className="bg-brown-900 rounded-hero border border-amber-400/25 overflow-hidden group flex flex-col hover:border-amber-400/60 transition-all duration-smooth shadow-warm-low"
+                >
+                  <Link href={`/blog/${post.slug}`} className="block relative aspect-[16/10] overflow-hidden">
+                    <Image
+                      src={post.coverImage}
+                      alt={post.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-slow"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 rounded-pill text-[10px] font-mono font-semibold bg-brown-950/80 backdrop-blur-sm text-amber border border-amber-400/30">
+                        {post.category}
+                      </span>
+                    </div>
+                  </Link>
+
+                  <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-xs font-mono text-sand-muted">
+                        <span>{post.publishedAt}</span>
+                        <span>&bull;</span>
+                        <span>{post.readTime}</span>
+                      </div>
+
+                      <h3 className="font-serif text-2xl font-bold text-sand-bright group-hover:text-amber transition-colors leading-snug">
+                        <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                      </h3>
+
+                      <p className="font-serif italic text-xs text-amber font-medium">
+                        {post.subtitle}
+                      </p>
+
+                      <p className="font-sans text-xs sm:text-sm text-sand-primary line-clamp-3 leading-relaxed">
+                        {post.excerpt}
+                      </p>
+                    </div>
+
+                    <div className="pt-3 border-t border-amber-400/15 flex items-center justify-between">
+                      <span className="text-xs font-sans text-sand-muted">
+                        By {post.author.name}
+                      </span>
+                      <Link
+                        href={`/blog/${post.slug}`}
+                        className="inline-flex items-center gap-1.5 text-xs font-display font-bold uppercase tracking-wider text-amber hover:text-amber-300 transition-colors"
+                      >
+                        <span>Read Story</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            7. PLAN YOUR VISIT: Location, Schedule & Final CTA
            ======================================================== */}
         <section className="px-4 sm:px-6 lg:px-8 py-20 bg-brown-850 border-t border-amber-400/20 text-left">
           <div className="max-w-content mx-auto space-y-10">

@@ -5,7 +5,8 @@ import Link from "next/link";
 import { Eyebrow } from "@/components/atoms/Eyebrow";
 import { SectionHeading } from "@/components/atoms/SectionHeading";
 import { siteConfig } from "@/content/site";
-import { ArrowRight, Compass, HeartHandshake, Sparkles, MapPin } from "lucide-react";
+import { blogPosts } from "@/content/blog";
+import { ArrowRight, Compass, HeartHandshake, Sparkles, MapPin, BookOpen, Calendar, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "About Us | Jun Designs — Celebrating Heritage Through Art, Creativity and Culture",
@@ -227,7 +228,90 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 4. STUDIO LOCATION & CTA SECTION */}
+      {/* 4. CULTURAL JOURNAL SECTION */}
+      <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 max-w-content mx-auto text-left space-y-12">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div className="space-y-2">
+            <Eyebrow>OUR CULTURAL JOURNAL</Eyebrow>
+            <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-sand-bright">
+              Stories of Ancestral Craft &amp; Heritage
+            </h2>
+            <p className="font-sans text-sm sm:text-base text-sand-primary max-w-xl leading-relaxed">
+              Discover historical reflections, traditional textile methods, and artisan field notes documented by our creative team.
+            </p>
+          </div>
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-1.5 text-xs font-display font-bold uppercase tracking-button text-amber hover:text-amber-300 transition-colors shrink-0"
+          >
+            <span>Explore All Journal Stories</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {blogPosts.map((post) => (
+            <article
+              key={post.slug}
+              className="bg-brown-950 rounded-hero border border-amber-400/25 overflow-hidden group flex flex-col hover:border-amber-400/60 transition-all duration-smooth shadow-warm-low"
+            >
+              <Link href={`/blog/${post.slug}`} className="block relative aspect-[16/10] overflow-hidden">
+                <Image
+                  src={post.coverImage}
+                  alt={post.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-slow"
+                />
+                <div className="absolute top-4 left-4">
+                  <span className="px-3 py-1 rounded-pill text-[10px] font-mono font-semibold bg-brown-950/80 backdrop-blur-sm text-amber border border-amber-400/30">
+                    {post.category}
+                  </span>
+                </div>
+              </Link>
+
+              <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-mono text-sand-muted">
+                    <Calendar className="w-3.5 h-3.5 text-amber" />
+                    <span>{post.publishedAt}</span>
+                    <span>&bull;</span>
+                    <Clock className="w-3.5 h-3.5 text-amber" />
+                    <span>{post.readTime}</span>
+                  </div>
+
+                  <h3 className="font-serif text-2xl font-bold text-sand-bright group-hover:text-amber transition-colors leading-snug">
+                    <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                  </h3>
+
+                  <p className="font-serif italic text-xs text-amber font-medium">
+                    {post.subtitle}
+                  </p>
+
+                  <p className="font-sans text-xs sm:text-sm text-sand-primary line-clamp-3 leading-relaxed">
+                    {post.excerpt}
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-amber-400/15 flex items-center justify-between">
+                  <span className="text-xs font-sans text-sand-muted">
+                    By {post.author.name}
+                  </span>
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className="inline-flex items-center gap-1.5 text-xs font-display font-bold uppercase tracking-wider text-amber hover:text-amber-300 transition-colors"
+                  >
+                    <span>Read Story</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* 5. STUDIO LOCATION & CTA SECTION */}
       <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-20 max-w-content mx-auto">
         <div className="rounded-hero bg-brown-950 border border-amber-400/30 p-8 sm:p-12 lg:p-16 text-center space-y-6 shadow-warm-low">
           <div className="inline-flex items-center gap-2 text-xs font-display font-semibold uppercase tracking-wider text-amber">

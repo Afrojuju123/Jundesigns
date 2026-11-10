@@ -74,6 +74,9 @@ export default async function BlogPostPage({ params }: PageProps) {
   const bodyParagraphs = post.content.slice(0, -1);
   const closingSignature = post.content[post.content.length - 1];
 
+  // Get other blog posts for the "More from the Journal" section
+  const otherPosts = blogPosts.filter((p) => p.slug !== post.slug);
+
   return (
     <div className="bg-brown-900 text-sand-primary text-left min-h-screen py-16 md:py-20">
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
@@ -232,6 +235,85 @@ export default async function BlogPostPage({ params }: PageProps) {
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
+        )}
+
+        {/* More Stories from the Cultural Journal */}
+        {otherPosts.length > 0 && (
+          <section className="pt-12 border-t border-amber-400/20 space-y-8">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div className="space-y-1.5">
+                <span className="font-display text-xs font-bold uppercase tracking-eyebrow text-amber block">
+                  — FROM THE CULTURAL JOURNAL
+                </span>
+                <h3 className="font-serif text-2xl sm:text-3xl font-bold text-sand-bright">
+                  More Stories &amp; Living Heritage
+                </h3>
+                <p className="font-sans text-xs sm:text-sm text-sand-muted max-w-xl leading-relaxed">
+                  Explore ancestral Rwandan craftsmanship, natural textile histories, and living geometric traditions from Rebero hill.
+                </p>
+              </div>
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-1.5 text-xs font-display font-bold uppercase tracking-button text-amber hover:text-amber-300 transition-colors shrink-0"
+              >
+                <span>View All Journal Entries</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {otherPosts.map((other) => (
+                <article
+                  key={other.slug}
+                  className="bg-brown-950 rounded-hero border border-amber-400/25 overflow-hidden group flex flex-col hover:border-amber-400/60 transition-all duration-smooth shadow-warm-low"
+                >
+                  <Link href={`/blog/${other.slug}`} className="block relative aspect-[16/10] overflow-hidden">
+                    <Image
+                      src={other.coverImage}
+                      alt={other.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-slow"
+                    />
+                    <div className="absolute top-3 left-3">
+                      <span className="px-2.5 py-0.5 rounded-pill text-[10px] font-mono font-semibold bg-brown-950/80 backdrop-blur-sm text-amber border border-amber-400/30">
+                        {other.category}
+                      </span>
+                    </div>
+                  </Link>
+
+                  <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-[11px] font-mono text-sand-muted">
+                        <span>{other.publishedAt}</span>
+                        <span>&bull;</span>
+                        <span>{other.readTime}</span>
+                      </div>
+                      <h4 className="font-serif text-xl font-bold text-sand-bright group-hover:text-amber transition-colors leading-snug">
+                        <Link href={`/blog/${other.slug}`}>{other.title}</Link>
+                      </h4>
+                      <p className="font-sans text-xs text-sand-primary line-clamp-2 leading-relaxed">
+                        {other.excerpt}
+                      </p>
+                    </div>
+
+                    <div className="pt-3 border-t border-amber-400/15 flex items-center justify-between">
+                      <span className="text-[11px] font-sans text-sand-muted">
+                        By {other.author.name}
+                      </span>
+                      <Link
+                        href={`/blog/${other.slug}`}
+                        className="inline-flex items-center gap-1 text-xs font-display font-bold uppercase tracking-wider text-amber hover:text-amber-300 transition-colors"
+                      >
+                        <span>Read Article</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
         )}
       </article>
     </div>

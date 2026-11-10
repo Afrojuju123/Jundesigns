@@ -55,6 +55,9 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
     if (href === "/schools") {
       return pathname.startsWith("/schools");
     }
+    if (href === "/blog") {
+      return pathname.startsWith("/blog");
+    }
     if (href === "/contact") {
       return pathname === "/contact";
     }
@@ -483,6 +486,23 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
                 )}
               >
                 Schools &amp; Groups
+              </Link>
+
+              {/* Journal / Blog */}
+              <Link
+                href="/blog"
+                aria-current={
+                  pathname?.startsWith("/blog") ? "page" : undefined
+                }
+                onClick={closeMobileMenuAndFocus}
+                className={cn(
+                  "block py-2.5 font-display text-base font-bold uppercase tracking-button",
+                  pathname?.startsWith("/blog")
+                    ? "text-amber"
+                    : "text-brown-950 hover:text-amber"
+                )}
+              >
+                Cultural Journal
               </Link>
 
               {/* Store */}
