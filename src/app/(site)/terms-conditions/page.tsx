@@ -54,7 +54,7 @@ export default function TermsConditionsPage() {
               2. Workshop Reservations &amp; Payment
             </h2>
             <p className="font-sans text-sm leading-relaxed text-sand-primary">
-              All workshop reservations must be booked and paid in advance through our authorized booking platform. A booking is confirmed only upon receipt of full payment and issuance of a unique booking reference (e.g., <code>JUN-2026-XXXX</code>). Session rates are 25,000 RWF per participant and include all necessary materials, equipment, and dedicated instructor guidance.
+              All workshop reservations must be booked and paid in advance through our authorized booking platform. A booking is confirmed only upon receipt of full payment and issuance of a unique booking reference (e.g., <code>JUN-2026-XXXX</code>). Session rates are 25,000 to 30,000 RWF per participant and include all necessary materials, equipment, and dedicated instructor guidance.
             </p>
           </div>
 

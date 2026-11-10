@@ -16,6 +16,7 @@ export interface SchoolPackage {
   id: SchoolPackageId;
   name: string;
   minStudents: number;
+  duration: string;
   colorClass: string;
   accentVar: string;
   activities: string[]; // Activity IDs
@@ -97,36 +98,57 @@ export const SCHOOL_ACTIVITIES: Record<string, SchoolActivity> = {
       "[CONTENT NEEDED: one or two plain sentences on observing master Rwandan artisans hand-weave sisal patterns]",
     image: "/images/weaving/weaving-hands-loom.jpg",
   },
-  "guhiha-live": {
-    id: "guhiha-live",
-    // [CONFIRM] needs a one-line explanation for readers who do not know the term
-    name: "Live guhiha",
-    type: "demonstration",
-    descriptionPlaceholder:
-      "[CONTENT NEEDED: one or two plain sentences explaining the traditional Rwandan craft of guhiha]",
-    image: "/images/schools/schools-dance-outdoors.jpg",
-  },
 };
+
+export const DURATION_NOTE = "N.B: A school can suggest the time they have available.";
+
+export interface TeacherAllowanceTier {
+  minStudents: number;
+  maxStudents: number;
+  freeTeachers: string;
+  label: string;
+}
+
+export const TEACHER_ALLOWANCE_TIERS: TeacherAllowanceTier[] = [
+  { minStudents: 25, maxStudents: 80, freeTeachers: "Up to 5 free teachers (additional teachers pay)", label: "25 to 80 students" },
+  { minStudents: 81, maxStudents: 150, freeTeachers: "Up to 8 free teachers", label: "81 to 150 students" },
+  { minStudents: 151, maxStudents: Infinity, freeTeachers: "Up to 9–12 free teachers", label: "151+ students" },
+];
+
+export const TEACHER_POLICY_NOTE =
+  "Coming with the maximum number of teachers is not mandatory; come with available teachers.";
+
+export const LOCATION_NOTE =
+  "This activity takes place at our workshop at Rebero Hill, but can also be hosted at your school (transportation fees will be calculated).";
+
+export const CUSTOM_GROUP_NOTE =
+  "Groups under 25 (e.g., 25, 35, 50) and those interested in customized workshops are welcome to reach out to book a tailored experience.";
+
+export function getTeacherAllowance(students: number): string | null {
+  if (students < 25 || isNaN(students)) return null;
+  if (students <= 80) return "Up to 5 free teachers (additional teachers pay)";
+  if (students <= 150) return "Up to 8 free teachers";
+  return "Up to 9–12 free teachers";
+}
 
 export const SCHOOL_PACKAGES: SchoolPackage[] = [
   {
     id: "bronze",
     name: "Bronze",
     minStudents: 25,
+    duration: "2 to 3 hours",
     colorClass: "text-[#B87333] border-[#B87333]", // Bronze metallic heritage
     accentVar: "var(--bronze-500, #B87333)",
-    // activities: storytelling, blacksmithing, dance, imigongo-live, guhiha-live
+    // activities: storytelling, blacksmithing, dance, imigongo-live
     activities: [
       "storytelling",
       "blacksmithing",
       "dance",
       "imigongo-live",
-      "guhiha-live",
     ],
-    // tiers: { 25-65: 5000, 66-130: 5000, 131+: 4500 }
-    // [CONFIRM] first two tiers identical (5,000 RWF), possible source typo
+    // tiers: { 25-65: 6000, 66-130: 5000, 131+: 4500 }
     tiers: [
-      { min: 25, max: 65, pricePerStudent: 5000, label: "25–65 students" },
+      { min: 25, max: 65, pricePerStudent: 6000, label: "25–65 students" },
       { min: 66, max: 130, pricePerStudent: 5000, label: "66–130 students" },
       { min: 131, max: Infinity, pricePerStudent: 4500, label: "131+ students" },
     ],
@@ -135,10 +157,10 @@ export const SCHOOL_PACKAGES: SchoolPackage[] = [
     id: "silver",
     name: "Silver",
     minStudents: 35,
+    duration: "4 to 5 hours",
     colorClass: "text-stone-300 border-stone-300", // Neutral sand silver
     accentVar: "var(--sand-300, #D4C5B9)",
     // activities: storytelling, blacksmithing, imigongo-live, imigongo-painting, pottery, dance
-    // [CONFIRM] Silver has no guhiha-live while Bronze and Gold do
     activities: [
       "storytelling",
       "blacksmithing",
@@ -158,9 +180,10 @@ export const SCHOOL_PACKAGES: SchoolPackage[] = [
     id: "gold",
     name: "Gold",
     minStudents: 50,
+    duration: "4 to 5 hours",
     colorClass: "text-amber border-amber", // Amber gold
     accentVar: "var(--amber-500, #D97706)",
-    // activities: storytelling, blacksmithing, imigongo-live, pottery, imigongo-painting, dance, women-weaving, guhiha-live
+    // activities: storytelling, blacksmithing, imigongo-live, pottery, imigongo-painting, dance, women-weaving
     activities: [
       "storytelling",
       "blacksmithing",
@@ -169,10 +192,8 @@ export const SCHOOL_PACKAGES: SchoolPackage[] = [
       "imigongo-painting",
       "dance",
       "women-weaving",
-      "guhiha-live",
     ],
     // tiers: { 50-100: 8000, 101-200: 7500, 201+: 7000 }
-    // [CONFIRM] source says "200 & above"; treated as 201+ to avoid ambiguity with 101-200
     tiers: [
       { min: 50, max: 100, pricePerStudent: 8000, label: "50–100 students" },
       { min: 101, max: 200, pricePerStudent: 7500, label: "101–200 students" },

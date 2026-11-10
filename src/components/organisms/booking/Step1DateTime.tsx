@@ -140,7 +140,7 @@ export const Step1DateTime: React.FC<Step1Props> = ({
         >
           {workshops.map((w) => (
             <option key={w.slug} value={w.slug} className="bg-brown-950 text-sand-bright">
-              {w.name} — 25,000 RWF / person
+              {w.name} — {w.priceRwf.toLocaleString()} RWF / person
             </option>
           ))}
         </select>

@@ -32,7 +32,7 @@ const structuredData = {
   "@id": "https://jundesigns.rw",
   url: "https://jundesigns.rw",
   telephone: "+250780324944",
-  priceRange: "25000 RWF",
+  priceRange: "25000-30000 RWF",
   address: {
     "@type": "PostalAddress",
     streetAddress: "Kigali Culture Village (Agaseke Center building), Rebero, Kicukiro. Street KK 557 St",
@@ -328,7 +328,7 @@ export default function HomePage() {
                   Review the price.
                 </p>
                 <p className="font-sans text-xs text-sand-muted">
-                  Fixed 25,000 RWF (~$18 USD) per person, all materials included.
+                  From 25,000 to 30,000 RWF per person, all materials included.
                 </p>
               </div>
 

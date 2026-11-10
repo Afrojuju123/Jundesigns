@@ -51,7 +51,7 @@ export const workshops: Workshop[] = [
       "All painting materials, your own board to take home, and a guide throughout. A short introduction to the history of Imigongo.",
     whatToBring:
       "Bring a bottle of water or snacks if you think you will need them. Mornings and evenings can be cool, so bring warm clothes.",
-    priceRwf: 25000,
+    priceRwf: 30000,
     duration: "Two hours",
     availability: "Every day",
     timeSlots: "Morning 10:00am, Afternoon 4:00pm",
@@ -127,7 +127,7 @@ export const workshops: Workshop[] = [
       "Instruction from local dancers, a short introduction to the history of the dance, and any costume pieces needed for the session.",
     whatToBring:
       "Comfortable clothes and shoes you can move in. Bring a bottle of water, and warm clothes for the weather.",
-    priceRwf: 25000,
+    priceRwf: 30000,
     duration: "Two hours",
     availability: "Every day",
     timeSlots: "Morning 10:00am, Afternoon 4:00pm",
@@ -204,7 +204,7 @@ export const workshops: Workshop[] = [
       "All the materials needed for the weaving session and a guide. A short introduction to Rwandan history and culture.",
     whatToBring:
       "Bring a bottle of water or snacks if you think you will need them. Mornings and evenings can be cool, so bring warm clothes.",
-    priceRwf: 25000,
+    priceRwf: 30000,
     duration: "Two hours",
     availability: "Every day",
     timeSlots: "Morning 10:00am, Afternoon 4:00pm",

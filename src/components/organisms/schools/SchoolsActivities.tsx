@@ -34,10 +34,6 @@ const ACTIVITY_DESCRIPTIONS: Record<string, { desc: string; takeaway?: string }>
     desc: "Artisans demonstrate how sisal plant fibers are harvested, dyed with natural plant extracts, and hand-woven into world-renowned Agaseke peace baskets.",
     takeaway: "Observation of traditional handloom & spiral coiling",
   },
-  "guhiha-live": {
-    desc: "Demonstration of the historic Rwandan craft of guhiha (traditional gourd and wood preparation), demonstrating ancestral carving tools and preservation methods.",
-    takeaway: "Living craft demonstration with heritage artisans",
-  },
 };
 
 const TYPE_LABELS: Record<string, { label: string; colorClass: string }> = {

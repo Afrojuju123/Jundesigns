@@ -284,7 +284,11 @@ export const ConfirmationClientView: React.FC<ConfirmationClientViewProps> = ({
               </div>
               <div className="flex justify-between text-brown-700">
                 <span>Rate</span>
-                <span>25,000 RWF / person</span>
+                <span>
+                  {booking.guests > 0
+                    ? `${Math.round(booking.amountRwf / booking.guests).toLocaleString()} RWF / person`
+                    : "Per person"}
+                </span>
               </div>
               <div className="flex justify-between text-brown-700">
                 <span>Guests</span>

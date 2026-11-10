@@ -11,27 +11,27 @@ console.log("=== Running Schools & Groups Tier Boundary Test Suite ===\n");
 
 // 1. Verify Activities and Packages Integrity
 assert.strictEqual(SCHOOL_PACKAGES.length, 3, "There must be exactly 3 packages");
-assert.strictEqual(Object.keys(SCHOOL_ACTIVITIES).length, 8, "There must be exactly 8 activities");
+assert.strictEqual(Object.keys(SCHOOL_ACTIVITIES).length, 7, "There must be exactly 7 activities (guhiha removed)");
 
 const bronze = SCHOOL_PACKAGES.find((p) => p.id === "bronze");
 const silver = SCHOOL_PACKAGES.find((p) => p.id === "silver");
 const gold = SCHOOL_PACKAGES.find((p) => p.id === "gold");
 
 assert.ok(bronze && silver && gold, "All three packages must exist");
-assert.strictEqual(bronze.activities.length, 5, "Bronze has 5 activities");
+assert.strictEqual(bronze.activities.length, 4, "Bronze has 4 activities");
 assert.strictEqual(silver.activities.length, 6, "Silver has 6 activities");
-assert.strictEqual(gold.activities.length, 8, "Gold has 8 activities");
+assert.strictEqual(gold.activities.length, 7, "Gold has 7 activities");
 console.log("✅ Package structures and activity assignments verified");
 
 // 2. Boundary Test Grid
 const boundaryTests = [
   // [students, bronzeExpected, silverExpected, goldExpected]
   [24, null, null, null],
-  [25, 5000, null, null],
-  [35, 5000, 7000, null],
-  [49, 5000, 7000, null],
-  [50, 5000, 7000, 8000],
-  [65, 5000, 7000, 8000],
+  [25, 6000, null, null],
+  [35, 6000, 7000, null],
+  [49, 6000, 7000, null],
+  [50, 6000, 7000, 8000],
+  [65, 6000, 7000, 8000],
   [66, 5000, 7000, 8000],
   [100, 5000, 7000, 8000],
   [101, 5000, 6500, 7500],

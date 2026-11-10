@@ -10,7 +10,7 @@ import { Phone, MessageSquare, ArrowRight } from "lucide-react";
 export const metadata: Metadata = {
   title: "Frequently Asked Questions | Cultural Workshops Kigali | Jun Designs",
   description:
-    "Everything you need to know about Jun Designs workshops: session duration, schedules (10am & 4pm daily), pricing (25,000 RWF), what is included, location on Rebero hill, and cancellation policy.",
+    "Everything you need to know about Jun Designs workshops: session duration, schedules (10am & 4pm daily), pricing (30,000 RWF for painting, dance, and weaving; 25,000 RWF for Igisoro), what is included, location on Rebero hill, and cancellation policy.",
   openGraph: {
     title: "FAQ | Jun Designs Cultural Workshops",
     description:
@@ -39,7 +39,7 @@ const faqItems: AccordionItem[] = [
     question: "How much does it cost?",
     answer: (
       <span>
-        <strong>25,000 RWF per person</strong> (approx. $18.50 USD). All materials, equipment, and local guide instruction are included with zero hidden fees.
+        <strong>30,000 RWF per person</strong> for Imigongo Painting, Traditional Rwandan Dance, and Carpet Hand-Weaving; <strong>25,000 RWF per person</strong> for Igisoro Game. All materials, equipment, and local guide instruction are included with zero hidden fees.
       </span>
     ),
   },
